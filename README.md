@@ -1,4 +1,10 @@
-# Generation base dependency
+*<p align="center">
+  <img src="https://git.science.uu.nl/m.j.robeer/genbase/-/raw/main/img/genbase.png" alt="genbase logo" width="50%">*
+</p>
+
+**<h3 align="center">
+Generation base dependency**
+</h3>
 
 [![PyPI](https://img.shields.io/pypi/v/genbase)](https://pypi.org/project/genbase/)
 [![Python_version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10-blue)](https://pypi.org/project/genbase/)
@@ -22,7 +28,7 @@ See [CHANGELOG.md](CHANGELOG.md) for a full overview of the changes for each ver
 
 ---
 
-<a href="https://marcelrobeer.github.io/text_explainability/" target="_blank"><img src="https://git.science.uu.nl/m.j.robeer/text_explainability/-/raw/main/img/TextLogo-Logo large.png" alt="T_xt explainability logo" width="200px"></a><p>`text_explainability` provides a generic architecture from which well-known state-of-the-art explainability approaches for text can be composed. This modular architecture allows components to be swapped out and combined, to quickly develop new types of explainability approaches for (natural language) text, or to improve a plethora of approaches by improving a single module. The `explainability` package is available through [PyPI](https://pypi.org/project/text-explainability/) and fully documented at [https://marcelrobeer.github.io/text_explainability/](https://marcelrobeer.github.io/text_explainability/).</p>
+<a href="https://marcelrobeer.github.io/text_explainability/" target="_blank"><img src="https://git.science.uu.nl/m.j.robeer/text_explainability/-/raw/main/img/TextLogo-Logo large.png" alt="T_xt explainability logo" width="200px"></a><p>`text_explainability` provides a _generic architecture_ from which well-known state-of-the-art explainability approaches for text can be composed. This modular architecture allows components to be swapped out and combined, to quickly _develop new types of explainability approaches_ for (natural language) text, or to _improve a plethora of approaches_ by improving a single module. The `explainability` package is available through [PyPI](https://pypi.org/project/text-explainability/) and fully documented at [https://marcelrobeer.github.io/text_explainability/](https://marcelrobeer.github.io/text_explainability/).</p>
 
 ---
 
