@@ -1,5 +1,5 @@
 *<p align="center">
-  <img src="https://git.science.uu.nl/m.j.robeer/genbase/-/raw/main/img/genbase.png" alt="genbase logo" width="50%">*
+  <img src="https://git.science.uu.nl/m.j.robeer/genbase/-/raw/master/img/genbase.png" alt="genbase logo" width="50%">*
 </p>
 
 **<h3 align="center">
