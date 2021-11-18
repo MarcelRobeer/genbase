@@ -2,7 +2,7 @@ image: python:3.9
 
 stages:
   - format
-#  - test
+  #  - test
   - security
 
 before_script:
