@@ -15,4 +15,4 @@ class Readable:
         return f'{self.__class__.__name__}({public_vars})'
 
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
