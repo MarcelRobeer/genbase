@@ -5,7 +5,6 @@ from typing import List
 
 import i18n
 
-
 LOCALE_MAP = {'br': 'pt_BR',
               'cs': 'cs_CZ',
               'da': 'da_DK',

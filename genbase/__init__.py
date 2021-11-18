@@ -1,7 +1,8 @@
 """Default classes for all to inherit from."""
 
 from genbase.data import import_data, train_test_split
-from genbase.internationalization import LOCALE_MAP, get_locale, set_locale, translate_list, translate_string
+from genbase.internationalization import (LOCALE_MAP, get_locale, set_locale,
+                                          translate_list, translate_string)
 from genbase.mixin import CaseMixin, SeedMixin
 from genbase.model import from_sklearn
 
