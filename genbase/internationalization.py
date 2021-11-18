@@ -34,7 +34,7 @@ LOCALE_MAP = {'br': 'pt_BR',
 
 FOLDER = os.path.abspath(os.path.dirname(os.path.abspath(__file__)))
 if not os.path.isdir(f'{FOLDER}{os.path.sep}locale'):
-    FOLDER = os.path.join(FOLDER, 'text_explainability')
+    FOLDER = os.path.join(FOLDER, 'genbase')
 
 i18n.load_path.append(os.path.join(FOLDER, 'locale'))
 i18n.set('filename_format', '{locale}.{format}')
