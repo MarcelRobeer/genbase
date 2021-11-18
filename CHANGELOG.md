@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Logo
+- Moved `Readable` from `text_explainability` to `genbase`
 
 ## [0.1.0] - 2021-11-18
 ### Added
