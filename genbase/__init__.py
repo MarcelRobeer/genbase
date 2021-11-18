@@ -1,8 +1,8 @@
 """Default classes for all to inherit from."""
 
-from .data import import_data, train_test_split
-from .mixin import CaseMixin, SeedMixin
-from .model import from_sklearn
+from genbase.data import import_data, train_test_split
+from genbase.mixin import CaseMixin, SeedMixin
+from genbase.model import from_sklearn
 
 
 class Readable:
