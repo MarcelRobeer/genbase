@@ -10,11 +10,11 @@
 ## Installation
 | Method | Instructions |
 |--------|--------------|
-| `pip` | Install from [PyPI](https://pypi.org/project/text-explainability/) via `pip3 install genbase`. |
+| `pip` | Install from [PyPI](https://pypi.org/project/genbase/) via `pip3 install genbase`. |
 | Local | Clone this repository and install via `pip3 install -e .` or locally run `python3 setup.py install`.
 
 ## Releases
-`text_explainability` is officially released through [PyPI](https://pypi.org/project/text-explainability/).
+`genbase` is officially released through [PyPI](https://pypi.org/project/genbase/).
 
 See [CHANGELOG.md](CHANGELOG.md) for a full overview of the changes for each version.
 
