@@ -17,17 +17,6 @@ isort:
   script:
     - python3 -m isort --check --diff genbase
 
-run_tests:
-  stage: test
-  script:
-    - python3 -m pytest
-
-  only:
-    - master
-    - branches
-  artifacts:
-    when: always
-
 bandit:
   stage: security
   script:
