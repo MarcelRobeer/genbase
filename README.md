@@ -11,6 +11,8 @@ Generation base dependency**
 [![Build_passing](https://img.shields.io/badge/build-passing-brightgreen)](https://git.science.uu.nl/m.j.robeer/genbase/-/pipelines)
 [![License](https://img.shields.io/pypi/l/genbase)](https://www.gnu.org/licenses/lgpl-3.0.en.html)
 
+Base functions, generation functions and generic wrappers.
+
 &copy; Marcel Robeer, 2021
 
 ## Installation
