@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.1.2] - 2021-11-18
+### Fixed
+- Bugfix in internationalization
+
+## [0.1.1] - 2021-11-18
 ### Added
 - Logo
 - Moved `Readable` from `text_explainability` to `genbase`
@@ -26,4 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.1.2]: https://pypi.org/project/genbase/0.1.2/
+[0.1.1]: https://pypi.org/project/genbase/0.1.1/
 [0.1.0]: https://pypi.org/project/genbase/0.1.0/
