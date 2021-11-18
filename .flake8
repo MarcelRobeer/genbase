@@ -1,0 +1,20 @@
+[flake8]
+exclude =
+    .git
+    __pycache__
+    __init__.py
+    setup.py
+    example_usage.py
+    .eggs
+    build
+    text_explainability/test
+    text_explainability/locale
+extend-ignore =
+    D413
+    D205
+    D400
+    E127
+    W291
+select = C,E,F,W,B,B950,D,RST
+
+max-line-length=120
