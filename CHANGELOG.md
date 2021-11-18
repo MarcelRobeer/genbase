@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Logo
 - Moved `Readable` from `text_explainability` to `genbase`
+- Moved `internationalization` to `genbase`
 
 ### Changed
 - Refactor of `genbase.data`
