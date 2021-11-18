@@ -13,7 +13,7 @@ def import_data(filename: str, *args, **kwargs) -> InstanceProvider:
     Example:
         Read `test.csv` from the folder `datasets`:
 
-        >>> from text_explainability.data import import_data
+        >>> from genbase.data import import_data
         >>> env = import_data('./datasets/test.csv', data_cols=['fulltext'], label_cols=['label'])
         >>> env.dataset, env.labels
 
