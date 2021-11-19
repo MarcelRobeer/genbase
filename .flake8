@@ -7,8 +7,8 @@ exclude =
     example_usage.py
     .eggs
     build
-    text_explainability/test
-    text_explainability/locale
+    genbase/test
+    genbase/locale
 extend-ignore =
     D413
     D205
