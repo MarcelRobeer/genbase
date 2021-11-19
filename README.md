@@ -11,9 +11,20 @@ Generation base dependency**
 [![Build_passing](https://img.shields.io/badge/build-passing-brightgreen)](https://git.science.uu.nl/m.j.robeer/genbase/-/pipelines)
 [![License](https://img.shields.io/pypi/l/genbase)](https://www.gnu.org/licenses/lgpl-3.0.en.html)
 
+---
+
 Base functions, generation functions and generic wrappers.
 
 &copy; Marcel Robeer, 2021
+
+## Quick tour
+| Module | Description |
+|--------|-------------|
+| `genbase` | Readable data representations and meta information class. |
+| `genbase.data` | Wrapper functions for working with data. |
+| `genbase.internationalization` | `i18n` internationalization. |
+| `genbase.mixin` | Mixins for seeding (reproducibility) and state machines. |
+| `genbase.model` | Wrapper functions for working with machine learning models. |
 
 ## Installation
 | Method | Instructions |
