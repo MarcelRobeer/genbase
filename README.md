@@ -17,7 +17,7 @@ Base functions, generation functions and generic wrappers.
 
 &copy; Marcel Robeer, 2021
 
-## Quick tour
+## Module overview
 | Module | Description |
 |--------|-------------|
 | `genbase` | Readable data representations and meta information class. |
