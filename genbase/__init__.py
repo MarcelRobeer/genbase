@@ -53,4 +53,4 @@ class MetaInfo:
         return {'META': self.meta, 'CONTENT': content}
 
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
