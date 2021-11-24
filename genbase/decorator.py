@@ -10,8 +10,12 @@ def add_callargs(function):
         ba = inspect.signature(function).bind(*args, **kwargs)
         ba.apply_defaults()
 
+        kw = next((k for k, v in ba.signature.parameters.items()
+                   if k == '__callargs__' or v.kind == inspect._ParameterKind.VAR_KEYWORD),
+                  None)
+
         # Do not decorate the function if we are unable to pass __callargs__ as an argument
-        if 'kwargs' not in ba.arguments and '__callargs__' not in ba.arguments:
+        if kw is None:
             return function(*ba.args, **ba.kwargs)
 
         # Construct __callargs__ (including introspection of the self argument)

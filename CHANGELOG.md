@@ -6,10 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7] - 2021-11-24
+### Fixed
+- Generalization of `**kwargs` argument in `@add_callargs`
+
 ## [0.1.6] - 2021-11-24
 ### Added
 - Added `genbase.decorator` to README.md
-- Base support for decorator `add_callargs()`
+- Base support for decorator `@add_callargs`
 
 ## [0.1.5] - 2021-11-24
 ### Added
@@ -52,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.1.7]: https://pypi.org/project/genbase/0.1.7/
 [0.1.6]: https://pypi.org/project/genbase/0.1.6/
 [0.1.5]: https://pypi.org/project/genbase/0.1.5/
 [0.1.4]: https://pypi.org/project/genbase/0.1.4/
