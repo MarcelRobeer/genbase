@@ -99,6 +99,8 @@ class MetaInfo(Configurable):
     def __init__(self,
                  type: str,
                  subtype: Optional[str] = None,
+                 fn_name: Optional[str] = None,
+                 callargs: Optional[dict] = None,
                  **kwargs):
         """Meta information class.
 
@@ -109,9 +111,14 @@ class MetaInfo(Configurable):
         """
         self._type = type
         self._subtype = subtype
+        self._callargs = callargs
         self._dict = {'type': type}
         if self._subtype is not None:
             self._dict['subtype'] = self._subtype
+        if fn_name is not None:
+            self._callargs['__name__'] = fn_name
+        if self._callargs is not None:
+            self._dict['callargs'] = self._callargs
         self._dict = dict(self._dict, **kwargs)
 
     @property
@@ -123,6 +130,10 @@ class MetaInfo(Configurable):
         return self._subtype
 
     @property
+    def callargs(self):
+        return self._callargs
+
+    @property
     def meta(self):
         return self._dict
 
@@ -132,4 +143,4 @@ class MetaInfo(Configurable):
         return {'META': self.meta, 'CONTENT': content() if callable(content) else content}
 
 
-__version__ = '0.1.4'
+__version__ = '0.1.5'

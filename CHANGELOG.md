@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5] - 2021-11-24
+### Added
+- `callargs` to `MetaInfo` class, for future work on rerunning (class) methods
+
 ## [0.1.4] - 2021-11-24
 ### Added
 - `Configurable` for reading/writing classes from a `config`, or `json`/`yaml` file
@@ -43,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.1.5]: https://pypi.org/project/genbase/0.1.5/
 [0.1.4]: https://pypi.org/project/genbase/0.1.4/
 [0.1.3]: https://pypi.org/project/genbase/0.1.3/
 [0.1.2]: https://pypi.org/project/genbase/0.1.2/
