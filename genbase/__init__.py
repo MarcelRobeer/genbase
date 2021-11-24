@@ -144,4 +144,4 @@ class MetaInfo(Configurable):
         return {'META': self.meta, 'CONTENT': content() if callable(content) else content}
 
 
-__version__ = '0.1.6'
+__version__ = '0.1.7'
