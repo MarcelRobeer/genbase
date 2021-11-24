@@ -32,6 +32,7 @@ setuptools.setup( # type: ignore
         'instancelib>=0.3.2.1',
         'numpy>=1.19.5',
         'python-i18n>=0.3.9',
+        'srsly>=2.4.2',
     ],
     python_requires = '>=3.8'
 )
