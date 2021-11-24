@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.6] - 2021-11-24
 ### Added
 - Added `genbase.decorator` to README.md
-- Base support for decorator `add_calldict()`
+- Base support for decorator `add_callargs()`
 
 ## [0.1.5] - 2021-11-24
 ### Added

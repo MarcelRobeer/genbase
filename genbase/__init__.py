@@ -7,7 +7,7 @@ import numpy as np
 import srsly
 
 from genbase.data import import_data, train_test_split
-from genbase.decorator import add_calldict
+from genbase.decorator import add_callargs
 from genbase.internationalization import (LOCALE_MAP, get_locale, set_locale,
                                           translate_list, translate_string)
 from genbase.mixin import CaseMixin, SeedMixin
