@@ -22,6 +22,7 @@ Base functions, generation functions and generic wrappers.
 |--------|-------------|
 | `genbase` | Readable data representations and meta information class. |
 | `genbase.data` | Wrapper functions for working with data. |
+| `genbase.decorator` | Base support for decorators. |
 | `genbase.internationalization` | `i18n` internationalization. |
 | `genbase.mixin` | Mixins for seeding (reproducibility) and state machines. |
 | `genbase.model` | Wrapper functions for working with machine learning models. |
