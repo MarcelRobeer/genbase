@@ -34,6 +34,8 @@ def export_safe(obj):
         return obj.tolist()
     elif isinstance(obj, (frozenset, set)):
         return list(obj)
+    elif isinstance(obj, (list, tuple)):
+        return [dict(recursive_to_dict(o)) if hasattr(o, '__dict__') else export_safe(o) for o in obj]
     return obj
 
 

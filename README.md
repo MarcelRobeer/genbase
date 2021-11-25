@@ -26,6 +26,7 @@ Base functions, generation functions and generic wrappers.
 | `genbase.internationalization` | `i18n` internationalization. |
 | `genbase.mixin` | Mixins for seeding (reproducibility) and state machines. |
 | `genbase.model` | Wrapper functions for working with machine learning models. |
+| `genbase.ui` | Exstensible user interfaces (UIs) for `genbase` dependencies |
 
 ## Installation
 | Method | Instructions |

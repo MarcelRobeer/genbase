@@ -82,17 +82,21 @@ class MetaInfo(Configurable):
                  subtype: Optional[str] = None,
                  fn_name: Optional[str] = None,
                  callargs: Optional[dict] = None,
+                 renderargs: Optional[dict] = None,
                  **kwargs):
         """Meta information class.
 
         Args:
             type (str): Type description.
             subtype (Optional[str], optional): Subtype description. Defaults to None.
+            callargs (Optional[dict], optional): Arguments used when the function was called. Defaults to None.
+            renderargs (Optional[dict], optional): Custom arguments passed to renderer. Defaults to None.
             **kwargs: Optional meta descriptors.
         """
         self._type = type
         self._subtype = subtype
         self._callargs = callargs
+        self._renderargs = renderargs
         self._dict = {'type': type}
         if self._subtype is not None:
             self._dict['subtype'] = self._subtype
@@ -100,6 +104,8 @@ class MetaInfo(Configurable):
             self._callargs['__name__'] = fn_name
         if self._callargs is not None:
             self._dict['callargs'] = self._callargs
+        if self._renderargs is not None:
+            self._dict['renderargs'] = self._renderargs
         self._dict = dict(self._dict, **kwargs)
 
     @property
@@ -118,15 +124,17 @@ class MetaInfo(Configurable):
     def meta(self):
         return self._dict
 
+    @property
+    def renderargs(self):
+        return self._renderargs if self._renderargs is not None else {}
+
     def to_config(self):
         content = self.content if hasattr(self, 'content') \
             else super().to_config(exclude=['_type', '_subtype', '_dict', '_callargs'])
         return {'META': self.meta, 'CONTENT': content() if callable(content) else content}
 
-    def __repr__(self) -> str:
-        if is_interactive():
-            Render(self.to_config()).show()
-        return str(self)
+    def _repr_html_(self) -> str:
+        return Render(self.to_config()).as_html(**self.renderargs) if is_interactive() else repr(self)
 
 
 __version__ = '0.1.8'
