@@ -11,6 +11,7 @@ from genbase.internationalization import (LOCALE_MAP, get_locale, set_locale,
                                           translate_list, translate_string)
 from genbase.mixin import CaseMixin, SeedMixin
 from genbase.model import from_sklearn
+from genbase.ui import Render, is_interactive
 from genbase.utils import recursive_to_dict
 
 
@@ -121,6 +122,11 @@ class MetaInfo(Configurable):
         content = self.content if hasattr(self, 'content') \
             else super().to_config(exclude=['_type', '_subtype', '_dict', '_callargs'])
         return {'META': self.meta, 'CONTENT': content() if callable(content) else content}
+
+    def __repr__(self) -> str:
+        if is_interactive():
+            Render(self.to_config()).show()
+        return str(self)
 
 
 __version__ = '0.1.8'
