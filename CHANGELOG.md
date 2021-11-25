@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Base rendering behavior for Jupyter notebook
 - Add render when `is_interactive()`
 - Ability to pass render arguments with `**renderargs`
+- Rendering of element in Jupyter notebook
 
 ### Fixed
 - `recursive_to_dict()` can also iterate over lists/tuples
