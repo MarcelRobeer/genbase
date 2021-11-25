@@ -3,7 +3,6 @@
 from pathlib import Path
 from typing import List, Optional
 
-import numpy as np
 import srsly
 
 from genbase.data import import_data, train_test_split
@@ -12,6 +11,7 @@ from genbase.internationalization import (LOCALE_MAP, get_locale, set_locale,
                                           translate_list, translate_string)
 from genbase.mixin import CaseMixin, SeedMixin
 from genbase.model import from_sklearn
+from genbase.utils import recursive_to_dict
 
 
 class Readable:
@@ -55,28 +55,7 @@ class Configurable:
         return cls.from_config(srsly.yaml_loads(yaml_or_path))
 
     def to_config(self, exclude: List[str]) -> dict:
-        def export_safe(obj):
-            if isinstance(obj, np.integer):
-                return int(obj)
-            elif isinstance(obj, np.floating):
-                return float(obj)
-            elif isinstance(obj, np.ndarray):
-                return obj.tolist()
-            return obj
-            
-        def recursive_to_dict(nested):
-            if hasattr(nested, '__class__'):
-                yield '__class__', str(nested.__class__).split("'")[1]
-            if hasattr(nested, '__dict__'):
-                nested = nested.__dict__
-            for key, value in nested.items():
-                if not key.startswith('__') and key not in exclude:
-                    if hasattr(value, '__dict__'):
-                        yield key, dict(recursive_to_dict(value))
-                    else:
-                        yield key, export_safe(value)
-
-        return dict(recursive_to_dict(self))
+        return dict(recursive_to_dict(self, exclude=exclude))
 
     def to_json(self, indent: int = 2) -> str:
         return srsly.json_dumps(self.to_config(), indent=indent)
