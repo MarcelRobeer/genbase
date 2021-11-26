@@ -1,10 +1,11 @@
-"Jupyter notebook rendering interface."
+"""Jupyter notebook rendering interface."""
 
 import importlib.util
 
 import srsly
 from IPython import get_ipython
 
+MAIN_COLOR = '#000000'
 CUSTOM_CSS = """
 ui {
     -webkit-text-size-adjust: 100%;
@@ -15,7 +16,7 @@ ui {
     -webkit-font-smoothing: antialiased;
     background-color: #e5e5e5;
     color: #1a1a1a;
-    font-family: "Source Sans Pro", sans-serif;
+    font-family: sans-serif;
     font-size: 1rem;
     line-height: 1.6;
 }
@@ -27,14 +28,13 @@ ui h4,
 ui h5,
 ui h6 {
     color: #0d0d0d;
-    font-family: Roboto, sans-serif;
     line-height: 1.2;
 }
 
 ui a,
 ui a:visited {
     background-color: transparent;
-    color: #000;
+    color: {ui_color};
     text-decoration: none;
     border-bottom: 1px dotted;
 }
@@ -90,16 +90,11 @@ footer .credits {
     padding: 1rem 2rem;
     margin-right: 0.0625rem;
     cursor: pointer;
-    background-color: #000;
+    background-color: {ui_color};
     color: #fff;
-    font-family: Roboto, sans-serif;
     font-size: 1.2rem;
     font-weight: 700;
     transition: background-color ease 0.3s;
-}
-
-.tabs label .material-icons {
-    margin-right: 0.3rem;
 }
 
 .tabs .tab {
@@ -122,8 +117,8 @@ footer .credits {
 
 .tabs [type=radio]:checked + label {
     background-color: #fff;
-    color: #000;
-    border-top: 4px solid #000;
+    color: {ui_color};
+    border-top: 4px solid {ui_color};
 }
 
 .tabs [type=radio]:checked + label + .tab {
@@ -142,7 +137,6 @@ footer .credits {
 }
 
 @media (min-width: 768px) {
-
     body.home {
         font-size: 1.125rem;
     }
@@ -195,9 +189,9 @@ class Render:
     def __validate_configs(self, *configs):
         configs = [li for subli in configs for li in subli]
         for config in configs:
-            assert isinstance(config, dict), 'Config should be dict'
-            assert 'META' in config, 'Config should contain "META" key'
-            assert 'CONTENT' in config, 'Config should contain "CONTENT" key'
+            assert isinstance(config, dict), 'Config should be dict'  # nosec
+            assert 'META' in config, 'Config should contain "META" key'  # nosec
+            assert 'CONTENT' in config, 'Config should contain "CONTENT" key'  # nosec
         return configs
 
     def __html(self, config, **renderargs) -> str:
@@ -250,4 +244,6 @@ class Render:
             </div>
             """
 
-        return f'<style>{CUSTOM_CSS}</style>{HTML}'
+        main_color = renderargs.pop('main_color', MAIN_COLOR)
+
+        return f'<style>{CUSTOM_CSS.format(ui_color=main_color)}</style>{HTML}'
