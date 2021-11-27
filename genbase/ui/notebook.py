@@ -1,7 +1,9 @@
 """Jupyter notebook rendering interface."""
 
+import traceback
 import srsly
 from IPython import get_ipython
+
 
 PACKAGE_LINK = 'https://git.science.uu.nl/m.j.robeer/genbase/'
 MAIN_COLOR = '#000000'
@@ -281,7 +283,21 @@ class Render:
         if 'title' in renderargs:
             title = renderargs['title']
 
-        config_ = ''.join(f'{config}' for config in self.configs)
+        def fmt_exception(e: Exception, fmt_type: str = 'JSON') -> str:
+            res = f'ERROR IN PARSING {fmt_type}\n'
+            res += '=' * len(res) + '\n'
+            return res + '\n'.join(traceback.TracebackException.from_exception(e).format())
+
+        try:
+            json = '\n'.join(srsly.json_dumps(config, indent=2) for config in self.configs)
+        except TypeError as e:
+            json = fmt_exception(e, fmt_type='JSON')
+
+        try:
+            yaml = '\n'.join(srsly.yaml_dumps(config) for config in self.configs)
+        except srsly.ruamel_yaml.representer.RepresenterError as e:
+            yaml = fmt_exception(e, fmt_type='YAML')
+
         html = ''.join(self.render_elements(config, **renderargs) for config in self.configs)
 
         HTML = f"""
@@ -298,10 +314,10 @@ class Render:
                                 <label for="tab2">Config</label>
                                 <div class="tab code">
                                     <h3>JSON</h3>
-                                    <pre>{srsly.json_dumps(config_, indent=2)}</pre>
+                                    <pre>{json}</pre>
 
                                     <h3>YAML</h3>
-                                    <pre>{config_}</pre>
+                                    <pre>{yaml}</pre>
                                 </div>
                             </div>
                         </div>

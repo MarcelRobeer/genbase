@@ -5,12 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.1.9] - 2021-11-27
 ### Added
 - Base rendering behavior for Jupyter notebook
 - Add render when `is_interactive()`
 - Ability to pass render arguments with `**renderargs`
 - Rendering of element in Jupyter notebook
 - Add check for `plotly_available()`
+- `export_serializable()` for Python inner objects (e.g. `scikit-learn`)
 
 ### Fixed
 - `recursive_to_dict()` can also iterate over lists/tuples
@@ -75,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.1.9]: https://pypi.org/project/genbase/0.1.9/
 [0.1.8]: https://pypi.org/project/genbase/0.1.8/
 [0.1.7]: https://pypi.org/project/genbase/0.1.7/
 [0.1.6]: https://pypi.org/project/genbase/0.1.6/

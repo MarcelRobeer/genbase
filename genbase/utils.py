@@ -1,8 +1,11 @@
 """Utility functions."""
 
+import base64
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 import numpy as np
+import sklearn
+import srsly
 from instancelib import (AbstractClassifier, Environment, Instance,
                          InstanceProvider, LabelProvider)
 
@@ -21,14 +24,19 @@ def export_instancelib(obj) -> Dict[str, Any]:
         return list(obj.all_data())
     elif hasattr(obj, '__dict__'):
         return dict(recursive_to_dict(obj))
-    return None  # TODO: update
+    return export_serializable(obj)
+
+
+def export_serializable(obj):
+    """Export in serializable format (`pickle.dumps()` that is `base64`-encoded).."""
+    return base64.b64encode(srsly.pickle_dumps(obj))
 
 
 def export_safe(obj):
-    """Safely export to transform into .json or .yaml."""
+    """Safely export to transform into JSON or YAML."""
     if isinstance(obj, np.integer):
         return int(obj)
-    elif isinstance(obj, np.floating):
+    elif isinstance(obj, (np.floating, float)):
         return float(obj)
     elif isinstance(obj, np.ndarray):
         return obj.tolist()
@@ -36,6 +44,8 @@ def export_safe(obj):
         return list(obj)
     elif isinstance(obj, (list, tuple)):
         return [dict(recursive_to_dict(o)) if hasattr(o, '__dict__') else export_safe(o) for o in obj]
+    elif callable(obj):
+        return export_serializable(obj)
     return obj
 
 
@@ -58,6 +68,8 @@ def recursive_to_dict(nested: Any, exclude: Optional[List[str]] = None) -> Itera
         if not key.startswith('__') and key not in exclude:
             if isinstance(value, (AbstractClassifier, Environment, Instance, InstanceProvider, LabelProvider)):
                 yield key, export_instancelib(value)
+            elif isinstance(value, (sklearn.base.BaseEstimator)):
+                yield key, export_serializable(value)
             elif hasattr(value, '__dict__'):
                 yield key, dict(recursive_to_dict(value, exclude=exclude))
             else:
