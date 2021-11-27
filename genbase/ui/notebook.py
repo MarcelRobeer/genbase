@@ -1,9 +1,9 @@
 """Jupyter notebook rendering interface."""
 
 import traceback
+
 import srsly
 from IPython import get_ipython
-
 
 PACKAGE_LINK = 'https://git.science.uu.nl/m.j.robeer/genbase/'
 MAIN_COLOR = '#000000'
