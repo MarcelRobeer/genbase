@@ -1,5 +1,6 @@
 """Default classes for all to inherit from."""
 
+import builtins
 from pathlib import Path
 from typing import List, Optional
 
@@ -24,6 +25,8 @@ class Readable:
 
 
 class Configurable:
+    """Add working with configs (configuration dictionaries) to a class."""
+
     @classmethod
     def from_config(cls, config: dict, **kwargs) -> 'Configurable':
         config = {**config, **kwargs}
@@ -32,6 +35,12 @@ class Configurable:
 
     @classmethod
     def read_json(cls, path: str, **read_args) -> 'Configurable':
+        """Read config from JSON file (GZIP JSON, JSONL or JSON).
+
+        Args:
+            path (str): File path.
+            **read_args: Optional arguments passed to `srsly.read_json()`/`srsly.read_jsonl()`/`srsly.read_gzip_json`.
+        """
         read_fn = srsly.read_json
         if path.endswith('.json.gz'):
             read_fn = srsly.read_gzip_json
@@ -41,39 +50,91 @@ class Configurable:
 
     @classmethod
     def from_json(cls, json_or_path: str, **read_args) -> 'Configurable':
+        """Get config from JSON string or filepath.
+
+        Args:
+            json_or_path (str): File path or JSON string.
+            **read_args: Optional arguments passed to `srsly.read_json()`/`srsly.read_jsonl()`/`srsly.read_gzip_json`.
+        """
         if Path.is_file(json_or_path):
             cls.read_json(json_or_path, **read_args)
         return cls.from_config(srsly.json_loads(json_or_path))
 
     @classmethod
     def read_yaml(cls, path: str) -> 'Configurable':
+        """Read config from YAML file.
+
+        Args:
+            path (str): File path.
+        """
         return srsly.read_yaml(path)
 
     @classmethod
     def from_yaml(cls, yaml_or_path: str) -> 'Configurable':
+        """Get config from YAML string or filepath.
+
+        Args:
+            yaml_or_path (str): File path or YAML string.
+        """
         if Path.is_file(yaml_or_path):
             return cls.from_config(cls.read_yaml(yaml_or_path))
         return cls.from_config(srsly.yaml_loads(yaml_or_path))
 
     def to_config(self, exclude: List[str]) -> dict:
+        """Convert class information into config (configuration dictionary).
+
+        Args:
+            exclude (List[str]): Names of variables to exclude.
+
+        Returns:
+            dict: [description]
+        """
         return dict(recursive_to_dict(self, exclude=exclude))
 
     def to_json(self, indent: int = 2) -> str:
+        """Convert config to JSON-formatted string.
+
+        Args:
+            indent (int, optional): Number of spaces to indent JSON. Defaults to 2.
+
+        Returns:
+            str: Config formatted as JSON.
+        """
         return srsly.json_dumps(self.to_config(), indent=indent)
 
     def to_yaml(self, **write_args) -> str:
+        """Convert config to YAML-formatted string.
+
+        Args:
+            **write_args: Optional arguments passed to `srsly.yaml_dumps()`
+
+        Returns:
+            str: Config formatted as YAML.
+        """
         return srsly.yaml_dumps(self.to_config(), **write_args)
 
     def write_json(self, path: str, indent: int = 2) -> None:
+        """Write class config to JSON.
+
+        Args:
+            path (str): Path to save to. If ends in `.json.gz` saves as GZIP JSON, `.jsonl` as JSONL or JSON by default.
+            indent (int, optional): Number of spaces to indent JSON. Defaults to 2.
+        """
         write_fn = srsly.write_json
         if path.endswith('.json.gz'):
             write_fn = srsly.write_gzip_json
         elif path.endswith('.jsonl'):
             write_fn = srsly.write_jsonl
-        return write_fn(path, self.to_config(), indent=indent)
+        write_fn(path, self.to_config(), indent=indent)
 
     def write_yaml(self, path: str, **write_args) -> None:
-        return srsly.write_yaml(path, self.to_config(), **write_args)
+        """Write class config to YAML.
+
+        Args:
+            path (str): Path to save to.
+            **write_args: Optional arguments passed to `srsly.write_yaml()`
+        """
+        srsly.write_yaml(path, self.to_config(), **write_args)
 
 
 class MetaInfo(Configurable):
@@ -83,6 +144,7 @@ class MetaInfo(Configurable):
                  fn_name: Optional[str] = None,
                  callargs: Optional[dict] = None,
                  renderargs: Optional[dict] = None,
+                 renderer = Render,
                  **kwargs):
         """Meta information class.
 
@@ -91,6 +153,7 @@ class MetaInfo(Configurable):
             subtype (Optional[str], optional): Subtype description. Defaults to None.
             callargs (Optional[dict], optional): Arguments used when the function was called. Defaults to None.
             renderargs (Optional[dict], optional): Custom arguments passed to renderer. Defaults to None.
+            renderer
             **kwargs: Optional meta descriptors.
         """
         self._type = type
@@ -107,6 +170,7 @@ class MetaInfo(Configurable):
         if self._renderargs is not None:
             self._dict['renderargs'] = self._renderargs
         self._dict = dict(self._dict, **kwargs)
+        self._renderer = renderer if isinstance(renderer, builtins.type) else renderer.__class__
 
     @property
     def type(self):
@@ -134,7 +198,7 @@ class MetaInfo(Configurable):
         return {'META': self.meta, 'CONTENT': content() if callable(content) else content}
 
     def _repr_html_(self) -> str:
-        return Render(self.to_config()).as_html(**self.renderargs) if is_interactive() else repr(self)
+        return self._renderer(self.to_config()).as_html(**self.renderargs) if is_interactive() else repr(self)
 
 
 __version__ = '0.1.8'

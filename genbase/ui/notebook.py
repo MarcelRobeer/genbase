@@ -1,10 +1,9 @@
 """Jupyter notebook rendering interface."""
 
-import importlib.util
-
 import srsly
 from IPython import get_ipython
 
+PACKAGE_LINK = 'https://git.science.uu.nl/m.j.robeer/genbase/'
 MAIN_COLOR = '#000000'
 CUSTOM_CSS = """
 ui {
@@ -31,38 +30,40 @@ ui h6 {
     line-height: 1.2;
 }
 
+footer a,
+footer a:visited,
 ui a,
 ui a:visited {
     background-color: transparent;
     color: {ui_color};
-    text-decoration: none;
     border-bottom: 1px dotted;
+    line-height: 1.6;
 }
 
+footer a:hover,
+footer a:active,
 ui a:hover,
 ui a:active {
     border-bottom: none;
     outline: 0;
 }
 
+footer a:focus,
 ui a:focus {
     border-bottom: none;
     outline: thin dotted;
 }
 
+footer a img,
 ui a img {
     border: 0;
 }
 
 footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 2rem;
-}
-
-footer .credits {
+    text-align: right;
+    margin: 0 1rem;
     font-size: 1rem;
+    color: #999;
 }
 
 .ui-container {
@@ -174,12 +175,21 @@ def is_interactive() -> bool:
         bool: True if interactive, False if not.
     """
     try:
-        if ('interactive' in str.lower(get_ipython().__class__.__name__) and 
-           importlib.util.find_spec('plotly') is not None):
+        if 'interactive' in str.lower(get_ipython().__class__.__name__):
             return True
         return False
     except:  # noqa: E722
         return False
+
+
+def plotly_available() -> bool:
+    """Check if `plotly` is installed.
+
+    Returns:
+        bool: True if available, False if not.
+    """
+    import importlib.util
+    return importlib.util.find_spec('plotly') is not None
 
 
 class Render:
@@ -194,9 +204,29 @@ class Render:
             assert 'CONTENT' in config, 'Config should contain "CONTENT" key'  # nosec
         return configs
 
-    def __html(self, config, **renderargs) -> str:
-        meta, content = config['META'], config['CONTENT']
+    def format_title(self, title: str, h: str = 'h1', **renderargs) -> str:
+        """Format title in HTML format.
 
+        Args:
+            title (str): Title contents.
+            h (str, optional): h-tag (h1, h2, ...). Defaults to 'h1'.
+
+        Returns:
+            str: Formatted title.
+        """
+        return f'<{h}>{title}</{h}>'
+
+    def render_title(self, meta: dict, content: dict, **renderargs) -> str:
+        """Render the title as HTML. Overwrite this when subclassing for your custom implementation.
+
+        Args:
+            meta (dict): Meta config.
+            content (dict): Content config.
+            **renderags: Optional arguments for rendering.
+
+        Returns:
+            str: Formatted title.
+        """
         title = renderargs.pop('title', None)
         if title is None:
             if 'title' in meta:
@@ -206,17 +236,53 @@ class Render:
                 if 'subtype' in meta:
                     title += f' ({meta["subtype"]})'
 
-        html = ''
+        return self.format_title(title, **renderargs) if title else ''
 
-        if title is not None:
-            html += f'<h1>{title}</h1>'
+    def render_content(self, meta: dict, content: dict, **renderargs) -> str:
+        """Render content as HTML. Overwrite this when subclassing for your custom implementation.
 
-        _ = meta.pop('callargs')
-        return html + f'<p>{meta}</p>' + f'<p>{content}</p>'
+        Args:
+            meta (dict): Meta config.
+            content (dict): Content config.
+            **renderags: Optional arguments for rendering.
+
+        Returns:
+            str: Formatted content.
+        """
+        return f'<p>{meta}</p>' + f'<p>{content}</p>'
+
+    def render_elements(self, config: dict, **renderargs) -> str:
+        """Render HTML title and content.
+
+        Args:
+            config (dict): Config meta & content.
+            **renderags: Optional arguments for rendering.
+
+        Returns:
+            str: Formatted title and content.
+        """
+        meta, content = config['META'], config['CONTENT']
+        _ = meta.pop('callargs')  # TODO: remove
+        return self.render_title(meta, content, **renderargs) + self.render_content(meta, content, **renderargs)
 
     def as_html(self, **renderargs) -> str:
+        """Get HTML element for interactive environments (e.g. Jupyter notebook).
+
+        Args:
+            **renderags: Optional arguments for rendering.
+
+        Returns:
+            str: HTML element.
+        """
+        title = 'Explanation'
+        titles = [config['META']['title'] for config in self.configs if 'title' in config['META']]
+        if titles:
+            title = ' | '.join(list(set(titles)))
+        if 'title' in renderargs:
+            title = renderargs['title']
+
         config_ = ''.join(f'{config}' for config in self.configs)
-        html = ''.join(self.__html(config, **renderargs) for config in self.configs)
+        html = ''.join(self.render_elements(config, **renderargs) for config in self.configs)
 
         HTML = f"""
             <div class="ui">
@@ -225,7 +291,7 @@ class Render:
                         <div class="ui-block">
                             <div class="tabs">
                                 <input type="radio" name="tabs" id="tab1" checked="checked" />
-                                <label class="wide" for="tab1">Explanation</label>
+                                <label class="wide" for="tab1">{title}</label>
                                 <div class="tab">{html}</div>
 
                                 <input type="radio" name="tabs" id="tab2" />
@@ -245,5 +311,9 @@ class Render:
             """
 
         main_color = renderargs.pop('main_color', MAIN_COLOR)
+        package = renderargs.pop('footer', PACKAGE_LINK)
+        package_name = package.rstrip('/').split('/')[-1]
 
-        return f'<style>{CUSTOM_CSS.format(ui_color=main_color)}</style>{HTML}'
+        FOOTER = f'<footer>Generated with <a href="{package}" target="_blank">{package_name}</a></footer>'
+
+        return f'<style>{CUSTOM_CSS.replace("{ui_color}", main_color)}</style>{HTML}{FOOTER}'
