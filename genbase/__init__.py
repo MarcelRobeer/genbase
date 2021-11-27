@@ -201,4 +201,4 @@ class MetaInfo(Configurable):
         return self._renderer(self.to_config()).as_html(**self.renderargs) if is_interactive() else repr(self)
 
 
-__version__ = '0.1.8'
+__version__ = '0.1.9'
