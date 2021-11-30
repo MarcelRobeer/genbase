@@ -5,6 +5,8 @@ import traceback
 import srsly
 from IPython import get_ipython
 
+from .svg import CLONE as CLONE_SVG
+
 PACKAGE_LINK = 'https://git.science.uu.nl/m.j.robeer/genbase/'
 MAIN_COLOR = '#000000'
 CUSTOM_CSS = """
@@ -129,14 +131,58 @@ footer {
 }
 
 .code pre {
+    color: #111;
     font-family: Consolas, monospace;
-    background-color: #eff5f6;
+    background-color: #eee !important;
     box-sizing: content-box;
-    padding: 2rem 1.5rem;
+    padding: 0.5rem 0.3rem !important;
     max-height: 30rem;
     overflow-x: hidden;
     overflow-y: scroll;
     box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.15);
+}
+
+
+.code section {
+    position: relative;
+}
+
+.code h3 {
+    font-size: 18px;
+    display: inline;
+}
+
+.code .pre-buttons {
+    float: right;
+}
+
+.code .pre-buttons > a {
+    all: unset;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    background: none;
+    font: inherit;
+    outline: inherit;
+    display: block;
+}
+
+.code .pre-buttons > a:hover {
+    color: --var(ui_color);
+}
+
+.code a > svg {
+    transition: stroke ease 0.3s;
+}
+
+.code a:hover > svg,
+.code a:hover > svg > * {
+    stroke: --var(ui_color);
+}
+
+.code a:active > svg,
+.code a:active > svg > * {
+    stroke: #27ae60;
 }
 
 p.info {
@@ -170,6 +216,19 @@ p.info {
     .tabs [type=radio]:checked + label {
         border-bottom: none;
     }
+}
+"""
+CUSTOM_JS = """
+function copy(elem){
+    var content = document.getElementById(elem).innerHTML;
+
+    navigator.clipboard.writeText(content)
+        .then(() => {
+        console.log("Text copied to clipboard!")
+    })
+        .catch(err => {
+        console.log('Something went wrong', err);
+    })
 }
 """
 
@@ -387,11 +446,25 @@ class Render:
                                 <input type="radio" name="tabs" id="tab2" />
                                 <label for="tab2">{self.config_title}</label>
                                 <div class="tab code">
-                                    <h3>JSON</h3>
-                                    <pre>{json}</pre>
+                                    <section>
+                                        <div class="pre-buttons">
+                                            <a onclick="copy('json-output')" href="#" title="Copy JSON to clipboard">
+                                                {CLONE_SVG}
+                                            </a>
+                                        </div>
+                                        <h3>JSON</h3>
+                                    </section>
+                                    <pre id="json-output">{json}</pre>
 
-                                    <h3>YAML</h3>
-                                    <pre>{yaml}</pre>
+                                    <section>
+                                        <div class="pre-buttons">
+                                            <a onclick="copy('yaml-output')" href="#" title="Copy YAML to clipboard">
+                                                {CLONE_SVG}
+                                            </a>
+                                        </div>
+                                        <h3>YAML</h3>
+                                    </section>
+                                    <pre id="yaml-output">{yaml}</pre>
                                 </div>
                             </div>
                         </div>
@@ -400,6 +473,8 @@ class Render:
             </div>
             """
 
+        JS = f'<script type="text/javascript">{CUSTOM_JS}</script>' if CUSTOM_JS else ''
+
         main_color = renderargs.pop('main_color', self.main_color)
         package = renderargs.pop('package_link', self.package_link)
         package_name = self.package_name
@@ -407,4 +482,4 @@ class Render:
         CSS = self.css(ui_color=main_color)
         FOOTER = f'<footer>Generated with <a href="{package}" target="_blank">{package_name}</a></footer>'
 
-        return f'<style>{CSS}</style>{HTML}{FOOTER}'
+        return f'<style>{CSS}</style>{HTML}{FOOTER}{JS}'

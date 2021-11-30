@@ -9,6 +9,7 @@ exclude =
     build
     genbase/test
     genbase/locale
+    genbase/ui/svg.py
 extend-ignore =
     D413
     D205
