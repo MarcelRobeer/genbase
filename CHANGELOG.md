@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.10] - 2021-11-30
+### Added
+- Checking if `matplotlib_available()`
+- `genbase.ui.get_color()`, getting colors with `matplotlib` 
+- Ability to exclude `__class__` from `recursive_to_dict()`
+- Subtitles to `genbase.ui.notebook.Render`
+- Documentation to `genbase.ui.notebook.Render`
+
+### Changed
+- Better subclassing for `genbase.ui.notebook.Render` (e.g. setting UI color and hyperlink)
+
+### Fixed
+- Bugfixes in `recursive_to_dict()`
+
 ## [0.1.9] - 2021-11-27
 ### Added
 - Base rendering behavior for Jupyter notebook
@@ -78,6 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.1.10]: https://pypi.org/project/genbase/0.1.10/
 [0.1.9]: https://pypi.org/project/genbase/0.1.9/
 [0.1.8]: https://pypi.org/project/genbase/0.1.8/
 [0.1.7]: https://pypi.org/project/genbase/0.1.7/

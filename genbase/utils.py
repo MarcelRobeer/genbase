@@ -32,6 +32,22 @@ def export_serializable(obj):
     return base64.b64encode(srsly.pickle_dumps(obj))
 
 
+def export_dict(nested: dict) -> Iterator[Tuple]:
+    """Export a normal dictionary recursively.
+
+    Args:
+        nested (dict): Dictionary to export
+
+    Yields:
+        Iterator[Tuple]: Current level of key-value pairs.
+    """
+    for key, value in nested.items():
+        if isinstance(value, dict):
+            yield key, dict(export_dict(value))
+        else:
+            yield key, export_safe(value)
+
+
 def export_safe(obj):
     """Safely export to transform into JSON or YAML."""
     if isinstance(obj, np.integer):
@@ -41,36 +57,41 @@ def export_safe(obj):
     elif isinstance(obj, np.ndarray):
         return obj.tolist()
     elif isinstance(obj, (frozenset, set)):
-        return list(obj)
+        return [export_safe(o) for o in list(obj)]
     elif isinstance(obj, (list, tuple)):
         return [dict(recursive_to_dict(o)) if hasattr(o, '__dict__') else export_safe(o) for o in obj]
+    elif isinstance(obj, dict):
+        return dict(export_dict(obj))
     elif callable(obj):
         return export_serializable(obj)
     return obj
 
 
-def recursive_to_dict(nested: Any, exclude: Optional[List[str]] = None) -> Iterator[Tuple[str, Any]]:
+def recursive_to_dict(nested: Any,
+                      exclude: Optional[List[str]] = None,
+                      include_class: bool = True) -> Iterator[Tuple[str, Any]]:
     """Recursively transform objects into a dictionary representation.
 
     Args:
         nested (Any): Current object.
         exclude (Optional[List[str]], optional): Keys to exclude. Defaults to None.
+        include_class (bool, optional): Whether to include `__class__` (True) or not (False). Defaults to True.
 
     Yields:
         Iterator[Tuple[str, Any]]: Current level of key-value pairs.
     """
     exclude = [] if exclude is None else exclude
-    if hasattr(nested, '__class__'):
+    if include_class and hasattr(nested, '__class__'):
         yield '__class__', str(nested.__class__).split("'")[1]
     if hasattr(nested, '__dict__'):
         nested = nested.__dict__
     for key, value in nested.items():
-        if not key.startswith('__') and key not in exclude:
+        if (isinstance(key, str) and not key.startswith('__')) and key not in exclude:
             if isinstance(value, (AbstractClassifier, Environment, Instance, InstanceProvider, LabelProvider)):
                 yield key, export_instancelib(value)
             elif isinstance(value, (sklearn.base.BaseEstimator)):
                 yield key, export_serializable(value)
             elif hasattr(value, '__dict__'):
-                yield key, dict(recursive_to_dict(value, exclude=exclude))
+                yield key, dict(recursive_to_dict(value, exclude=exclude, include_class=include_class))
             else:
                 yield key, export_safe(value)

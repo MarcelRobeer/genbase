@@ -193,9 +193,13 @@ class MetaInfo(Configurable):
         return self._renderargs if self._renderargs is not None else {}
 
     def to_config(self):
-        content = self.content if hasattr(self, 'content') \
-            else super().to_config(exclude=['_type', '_subtype', '_dict', '_callargs'])
-        return {'META': self.meta, 'CONTENT': content() if callable(content) else content}
+        if hasattr(self, 'content'):
+            _content = self.content() if callable(self.content) else self.content
+            content = dict(recursive_to_dict(_content, include_class=False))
+        else:
+            content = super().to_config(exclude=['_type', '_subtype', '_dict', '_callargs'])
+
+        return {'META': self.meta, 'CONTENT': content}
 
     def _repr_html_(self) -> str:
         return self._renderer(self.to_config()).as_html(**self.renderargs) if is_interactive() else repr(self)
