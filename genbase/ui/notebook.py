@@ -1,6 +1,8 @@
 """Jupyter notebook rendering interface."""
 
 import traceback
+import uuid
+from typing import List, Union
 
 import srsly
 from IPython import get_ipython
@@ -80,14 +82,14 @@ footer {
     justify-content: center;
 }
 
-.tabs {
+.--var(tabs_id) {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.4);
 }
 
-.tabs label {
+.--var(tabs_id) label {
     width: 100%;
     display: flex;
     align-items: center;
@@ -102,7 +104,7 @@ footer {
     transition: background-color ease 0.3s;
 }
 
-.tabs .tab {
+.--var(tabs_id) .tab {
     flex-grow: 1;
     width: 100%;
     height: 100%;
@@ -112,25 +114,25 @@ footer {
     background-color: #fff;
 }
 
-.tabs .tab > *:not(:last-child) {
+.--var(tabs_id) .tab > *:not(:last-child) {
     margin-bottom: 0.8rem;
 }
 
-.tabs [type=radio] {
+.--var(tabs_id) [type=radio] {
     display: none;
 }
 
-.tabs [type=radio]:checked + label {
+.--var(tabs_id) [type=radio]:checked + label {
     background-color: #fff;
     color: --var(ui_color);
     border-top: 4px solid --var(ui_color);
 }
 
-.tabs [type=radio]:checked + label + .tab {
+.--var(tabs_id) [type=radio]:checked + label + .tab {
     display: block;
 }
 
-.code pre {
+.code > pre {
     color: #111;
     font-family: Consolas, monospace;
     background-color: #eee !important;
@@ -141,7 +143,6 @@ footer {
     overflow-y: scroll;
     box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.15);
 }
-
 
 .code section {
     position: relative;
@@ -159,8 +160,7 @@ footer {
 .code .pre-buttons > a {
     all: unset;
     padding: 0;
-    width: 24px;
-    height: 24px;
+    height: 20px;
     background: none;
     font: inherit;
     outline: inherit;
@@ -189,6 +189,36 @@ p.info {
     color: #aaa;
 }
 
+.instances-wrapper table {
+    width: 100%;
+    font-size: 1em;
+}
+
+.instances-wrapper tr { 
+    display: flex;
+    align-items: stretch;    
+}
+
+.instances-wrapper td:last-child,
+.instances-wrapper th:last-child {
+    flex: 1;
+    display: inline-block;
+}
+
+.instances-wrapper td {
+    text-align: left;
+}
+
+.instances-wrapper th {
+    color: #fff;
+    background-color: --var(ui_color);
+}
+
+.instances-wrapper tr > th {
+    padding: 1em;
+    margin: -0.5em;
+}
+
 @media (min-width: 768px) {
     body.home {
         font-size: 1.125rem;
@@ -198,22 +228,22 @@ p.info {
         padding: 2rem 2rem;
     }
 
-    .tabs label {
+    .--var(tabs_id) label {
         order: 1;
         width: auto;
     }
 
-    .tabs label.wide {
+    .--var(tabs_id) label.wide {
         flex: 1;
         align-items: left;
         justify-content: left;
     }
 
-    .tabs .tab {
+    .--var(tabs_id) .tab {
         order: 9;
     }
 
-    .tabs [type=radio]:checked + label {
+    .--var(tabs_id) [type=radio]:checked + label {
         border-bottom: none;
     }
 }
@@ -233,6 +263,50 @@ function copy(elem){
 """
 
 
+def format_label(label: str, label_name: str = 'Label', h: str = 'h3') -> str:
+    """Format label as title.
+
+    Args:
+        label (str): Name of label
+        label_name (str, optional): Label name. Defaults to 'Label'.
+        h (str, optional): h-tag (h1, h2, ...). Defaults to 'h1'.
+
+    Returns:
+        str: Formatted label title.
+    """
+    return f'<{h}>{label_name.title()}: <kbd>{label}</kbd></{h}>'
+
+
+def format_instance(instance: dict) -> str:
+    """Format an `instancelib` instance.
+
+    Args:
+        instance (dict): `instancelib` instance exported to config.
+
+    Returns:
+        str: Formatted instance.
+    """
+    repr = instance['_representation'] if '_representation' in instance else instance['_data']
+    identifier = instance['_identifier']
+    instance_title = instance['__class__'] + ': ' + ' | '.join([str(i) for i in [identifier, repr]])
+    return f'<tr title={instance_title}><td>{identifier}</td><td>{repr}</td></tr>'
+
+
+def format_instances(instances: Union[dict, List[dict]]) -> str:
+    """Format multiple `instancelib` instances.
+
+    Args:
+        instances (Union[dict, List[dict]]): instances.
+
+    Returns:
+        str: Formatted instances.
+    """
+    if isinstance(instances, dict):
+        instances = [instances]
+    return '<div class="instances-wrapper"><table><tr><th>ID</th><th>Instance</th></tr>' + \
+           f'{"".join(format_instance(i) for i in instances)}</table></div>'
+
+
 def is_interactive() -> bool:
     """Check whether the environment is interactive (Jupyter Notebook) and plotly is available for rendering.
 
@@ -245,26 +319,6 @@ def is_interactive() -> bool:
         return False
     except:  # noqa: E722
         return False
-
-
-def matplotlib_available() -> bool:
-    """Check if `matplotlib` is installed.
-
-    Returns:
-        bool: True if available, False if not.
-    """
-    import importlib.util
-    return importlib.util.find_spec('matplotlib') is not None
-
-
-def plotly_available() -> bool:
-    """Check if `plotly` is installed.
-
-    Returns:
-        bool: True if available, False if not.
-    """
-    import importlib.util
-    return importlib.util.find_spec('plotly') is not None
 
 
 class Render:
@@ -432,46 +486,47 @@ class Render:
             yaml = fmt_exception(e, fmt_type='YAML')
 
         html = ''.join(self.render_elements(config, **renderargs) for config in self.configs)
+        tabs_id = f'tabs-{str(uuid.uuid4())}'
 
         HTML = f"""
-            <div class="ui">
-                <section class="ui-wrapper">
-                    <div class="ui-container">
-                        <div class="ui-block">
-                            <div class="tabs">
-                                <input type="radio" name="tabs" id="tab1" checked="checked" />
-                                <label class="wide" for="tab1">{self.tab_title}</label>
-                                <div class="tab">{html}</div>
+        <div class="ui">
+            <section class="ui-wrapper">
+                <div class="ui-container">
+                    <div class="ui-block">
+                        <div class="{tabs_id}">
+                            <input type="radio" name="{tabs_id}" id="{tabs_id}-tab1" checked="checked" />
+                            <label class="wide" for="{tabs_id}-tab1">{self.tab_title}</label>
+                            <div class="tab">{html}</div>
 
-                                <input type="radio" name="tabs" id="tab2" />
-                                <label for="tab2">{self.config_title}</label>
-                                <div class="tab code">
-                                    <section>
-                                        <div class="pre-buttons">
-                                            <a onclick="copy('json-output')" href="#" title="Copy JSON to clipboard">
-                                                {CLONE_SVG}
-                                            </a>
-                                        </div>
-                                        <h3>JSON</h3>
-                                    </section>
-                                    <pre id="json-output">{json}</pre>
+                            <input type="radio" name="{tabs_id}" id="{tabs_id}-tab2" />
+                            <label for="{tabs_id}-tab2">{self.config_title}</label>
+                            <div class="tab code">
+                                <section>
+                                    <div class="pre-buttons">
+                                        <a onclick="copy('json-output')" href="#" title="Copy JSON to clipboard">
+                                            {CLONE_SVG}
+                                        </a>
+                                    </div>
+                                    <h3>JSON</h3>
+                                </section>
+                                <pre id="json-output">{json}</pre>
 
-                                    <section>
-                                        <div class="pre-buttons">
-                                            <a onclick="copy('yaml-output')" href="#" title="Copy YAML to clipboard">
-                                                {CLONE_SVG}
-                                            </a>
-                                        </div>
-                                        <h3>YAML</h3>
-                                    </section>
-                                    <pre id="yaml-output">{yaml}</pre>
-                                </div>
+                                <section>
+                                    <div class="pre-buttons">
+                                        <a onclick="copy('yaml-output')" href="#" title="Copy YAML to clipboard">
+                                            {CLONE_SVG}
+                                        </a>
+                                    </div>
+                                    <h3>YAML</h3>
+                                </section>
+                                <pre id="yaml-output">{yaml}</pre>
                             </div>
                         </div>
                     </div>
-                </section>
-            </div>
-            """
+                </div>
+            </section>
+        </div>
+        """
 
         JS = f'<script type="text/javascript">{CUSTOM_JS}</script>' if CUSTOM_JS else ''
 
@@ -479,7 +534,7 @@ class Render:
         package = renderargs.pop('package_link', self.package_link)
         package_name = self.package_name
 
-        CSS = self.css(ui_color=main_color)
+        CSS = self.css(ui_color=main_color, tabs_id=tabs_id)
         FOOTER = f'<footer>Generated with <a href="{package}" target="_blank">{package_name}</a></footer>'
 
         return f'<style>{CSS}</style>{HTML}{FOOTER}{JS}'

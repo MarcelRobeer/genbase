@@ -56,6 +56,8 @@ def export_safe(obj):
         return float(obj)
     elif isinstance(obj, np.ndarray):
         return obj.tolist()
+    elif isinstance(obj, np.str):
+        return str(obj)
     elif isinstance(obj, (frozenset, set)):
         return [export_safe(o) for o in list(obj)]
     elif isinstance(obj, (list, tuple)):
@@ -88,10 +90,10 @@ def recursive_to_dict(nested: Any,
     for key, value in nested.items():
         if (isinstance(key, str) and not key.startswith('__')) and key not in exclude:
             if isinstance(value, (AbstractClassifier, Environment, Instance, InstanceProvider, LabelProvider)):
-                yield key, export_instancelib(value)
+                yield export_safe(key), export_instancelib(value)
             elif isinstance(value, (sklearn.base.BaseEstimator)):
-                yield key, export_serializable(value)
+                yield export_safe(key), export_serializable(value)
             elif hasattr(value, '__dict__'):
-                yield key, dict(recursive_to_dict(value, exclude=exclude, include_class=include_class))
+                yield export_safe(key), dict(recursive_to_dict(value, exclude=exclude, include_class=include_class))
             else:
-                yield key, export_safe(value)
+                yield export_safe(key), export_safe(value)

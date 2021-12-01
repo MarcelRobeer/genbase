@@ -3,14 +3,16 @@
 from typing import Sequence, Union
 
 import matplotlib.cm
+import matplotlib.colors
 
-from genbase.ui.notebook import Render, is_interactive, matplotlib_available
+from genbase.ui.notebook import Render, format_instances, is_interactive
+from genbase.ui.plot import matplotlib_available
 
 
 def get_color(value: Union[float, Sequence[float]],
               min_value: float = -1.0,
               max_value: float = 1.0,
-              colorscale: str = 'RdYlGn',
+              colorscale: Union[list, str] = 'RdYlGn',
               format: str = 'hex') -> Union[str, Sequence[str]]:
     """Get color from a `matplotlib` colorscale.
 
@@ -18,7 +20,7 @@ def get_color(value: Union[float, Sequence[float]],
         value (Union[float, Sequence[float]]): Value(s) to convert. Will be clamped to `[min_value, max_value]`.
         min_value (float, optional): Minimum scale value. Defaults to -1.0.
         max_value (float, optional): Maximum scale value. Defaults to 1.0.
-        colorscale (str, optional): `matplotlib` colorscale name. Defaults to 'RdYlGn'.
+        colorscale (Union[list, str], optional): `matplotlib` scale definition or colorscale name. Defaults to 'RdYlGn'.
         format (str, optional): Return format 'hex'/'rgb'. Defaults to 'hex'.
 
     Raises:
@@ -45,7 +47,10 @@ def get_color(value: Union[float, Sequence[float]],
     # Clamp value
     value = [min(max(v, min_value), max_value) for v in value]
 
-    cmap = matplotlib.cm.get_cmap(colorscale)
+    if isinstance(colorscale, str):
+        cmap = matplotlib.cm.get_cmap(colorscale)
+    else:
+        cmap = matplotlib.colors.LinearSegmentedColormap.from_list('', colorscale)
 
     res = [cmap(int((v - min_value) / (max_value - min_value) * cmap.N)) for v in value]
     if format == 'hex':

@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.11] - 2021-12-01
+### Added
+- Copy to clipboard button to `genbase.ui.notebook.Render`
+- Ability to define a colorscale in `genbase.ui.get_color()`
+
+### Changed
+- Moved plotting to `genbase.ui.plot`
+
+### Fixed
+- Safe `np.str` exports
+- Rendering of multiple UIs in `genbase.ui.notebook.Render`
+
 ## [0.1.10] - 2021-11-30
 ### Added
 - Checking if `matplotlib_available()`
@@ -92,6 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.1.11]: https://pypi.org/project/genbase/0.1.11/
 [0.1.10]: https://pypi.org/project/genbase/0.1.10/
 [0.1.9]: https://pypi.org/project/genbase/0.1.9/
 [0.1.8]: https://pypi.org/project/genbase/0.1.8/
