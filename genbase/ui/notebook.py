@@ -12,84 +12,82 @@ from .svg import CLONE as CLONE_SVG
 PACKAGE_LINK = 'https://git.science.uu.nl/m.j.robeer/genbase/'
 MAIN_COLOR = '#000000'
 CUSTOM_CSS = """
-ui {
+#--var(ui_id),
+#--var(ui_id) + footer {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    padding: 0;
-    margin: 0;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    background-color: #e5e5e5;
-    color: #1a1a1a;
+    margin: 1em;
     font-family: sans-serif;
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 1.2rem;
+    line-height: 1.2;
 }
 
-ui h1,
-ui h2,
-ui h3,
-ui h4,
-ui h5,
-ui h6 {
+#--var(ui_id) h1,
+#--var(ui_id) h2,
+#--var(ui_id) h3,
+#--var(ui_id) h4,
+#--var(ui_id) h5,
+#--var(ui_id) h6 {
     color: #0d0d0d;
     line-height: 1.2;
 }
 
-footer a,
-footer a:visited,
-ui a,
-ui a:visited {
+#--var(ui_id) + footer a,
+#--var(ui_id) + footer a:visited,
+#--var(ui_id) a,
+#--var(ui_id) a:visited {
     background-color: transparent;
     color: --var(ui_color);
     border-bottom: 1px dotted;
     line-height: 1.6;
 }
 
-footer a:hover,
-footer a:active,
-ui a:hover,
-ui a:active {
+#--var(ui_id) + footer a:hover,
+#--var(ui_id) + footer a:active,
+#--var(ui_id) a:hover,
+#--var(ui_id) a:active {
     border-bottom: none;
     outline: 0;
 }
 
-footer a:focus,
-ui a:focus {
+#--var(ui_id) + footer a:focus,
+#--var(ui_id) a:focus {
     border-bottom: none;
     outline: thin dotted;
 }
 
-footer a img,
-ui a img {
+#--var(ui_id) + footer a img,
+#--var(ui_id) a img {
     border: 0;
 }
 
-footer {
+#--var(ui_id) + footer {
     text-align: right;
     margin: 0 1rem;
     font-size: 1rem;
     color: #999;
 }
 
-.ui-container {
+#--var(ui_id) .ui-container {
     padding: 0.2rem;
 }
 
-.ui-block {
+#--var(ui_id) .ui-block {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.--var(tabs_id) {
+#--var(tabs_id) {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.4);
 }
 
-.--var(tabs_id) label {
+#--var(tabs_id) label {
     width: 100%;
     display: flex;
     align-items: center;
@@ -104,7 +102,7 @@ footer {
     transition: background-color ease 0.3s;
 }
 
-.--var(tabs_id) .tab {
+#--var(tabs_id) .tab {
     flex-grow: 1;
     width: 100%;
     height: 100%;
@@ -114,25 +112,25 @@ footer {
     background-color: #fff;
 }
 
-.--var(tabs_id) .tab > *:not(:last-child) {
+#--var(tabs_id) .tab > *:not(:last-child) {
     margin-bottom: 0.8rem;
 }
 
-.--var(tabs_id) [type=radio] {
+#--var(tabs_id) [type=radio] {
     display: none;
 }
 
-.--var(tabs_id) [type=radio]:checked + label {
+#--var(tabs_id) [type=radio]:checked + label {
     background-color: #fff;
     color: --var(ui_color);
     border-top: 4px solid --var(ui_color);
 }
 
-.--var(tabs_id) [type=radio]:checked + label + .tab {
+#--var(tabs_id) [type=radio]:checked + label + .tab {
     display: block;
 }
 
-.code > pre {
+#--var(tabs_id) .code > pre {
     color: #111;
     font-family: Consolas, monospace;
     background-color: #eee !important;
@@ -144,20 +142,20 @@ footer {
     box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.15);
 }
 
-.code section {
+#--var(tabs_id) .code section {
     position: relative;
 }
 
-.code h3 {
+#--var(tabs_id) .code h3 {
     font-size: 18px;
     display: inline;
 }
 
-.code .pre-buttons {
+#--var(tabs_id) .code .pre-buttons {
     float: right;
 }
 
-.code .pre-buttons > a {
+#--var(tabs_id) .code .pre-buttons > a {
     all: unset;
     padding: 0;
     height: 20px;
@@ -167,83 +165,83 @@ footer {
     display: block;
 }
 
-.code .pre-buttons > a:hover {
+#--var(tabs_id) .code .pre-buttons > a:hover {
     color: --var(ui_color);
 }
 
-.code a > svg {
+#--var(tabs_id) .code a > svg {
     transition: stroke ease 0.3s;
 }
 
-.code a:hover > svg,
-.code a:hover > svg > * {
+#--var(tabs_id) .code a:hover > svg,
+#--var(tabs_id) .code a:hover > svg > * {
     stroke: --var(ui_color);
 }
 
-.code a:active > svg,
-.code a:active > svg > * {
+#--var(tabs_id) .code a:active > svg,
+#--var(tabs_id) .code a:active > svg > * {
     stroke: #27ae60;
 }
 
-p.info {
+#--var(tabs_id) p.info {
     color: #aaa;
 }
 
-.instances-wrapper table {
+#--var(tabs_id) .instances-wrapper table {
     width: 100%;
     font-size: 1em;
 }
 
-.instances-wrapper tr { 
+#--var(tabs_id) .instances-wrapper tr { 
     display: flex;
     align-items: stretch;    
 }
 
-.instances-wrapper td:last-child,
-.instances-wrapper th:last-child {
+#--var(tabs_id) .instances-wrapper td:last-child,
+#--var(tabs_id) .instances-wrapper th:last-child {
     flex: 1;
     display: inline-block;
 }
 
-.instances-wrapper td {
+#--var(tabs_id) .instances-wrapper td {
     text-align: left;
 }
 
-.instances-wrapper th {
+#--var(tabs_id) .instances-wrapper th {
     color: #fff;
     background-color: --var(ui_color);
 }
 
-.instances-wrapper tr > th {
+#--var(tabs_id) .instances-wrapper tr > th {
     padding: 1em;
     margin: -0.5em;
 }
 
 @media (min-width: 768px) {
-    body.home {
-        font-size: 1.125rem;
+    #--var(ui_id) {
+        font-size: 1.33rem;
     }
 
     .ui-container {
         padding: 2rem 2rem;
     }
 
-    .--var(tabs_id) label {
+    #--var(tabs_id) label {
         order: 1;
         width: auto;
     }
 
-    .--var(tabs_id) label.wide {
+    #--var(tabs_id) label.wide {
         flex: 1;
         align-items: left;
         justify-content: left;
     }
 
-    .--var(tabs_id) .tab {
+    #--var(tabs_id) .tab {
         order: 9;
     }
 
-    .--var(tabs_id) [type=radio]:checked + label {
+    #--var(tabs_id) [type=radio]:checked + label {
         border-bottom: none;
     }
 }
@@ -486,14 +484,16 @@ class Render:
             yaml = fmt_exception(e, fmt_type='YAML')
 
         html = ''.join(self.render_elements(config, **renderargs) for config in self.configs)
-        tabs_id = f'tabs-{str(uuid.uuid4())}'
+        id = str(uuid.uuid4())
+        tabs_id = f'tabs-{id}'
+        ui_id = f'ui-{id}'
 
         HTML = f"""
-        <div class="ui">
+        <div id="{ui_id}">
             <section class="ui-wrapper">
                 <div class="ui-container">
                     <div class="ui-block">
-                        <div class="{tabs_id}">
+                        <div id="{tabs_id}">
                             <input type="radio" name="{tabs_id}" id="{tabs_id}-tab1" checked="checked" />
                             <label class="wide" for="{tabs_id}-tab1">{self.tab_title}</label>
                             <div class="tab">{html}</div>
@@ -534,7 +534,7 @@ class Render:
         package = renderargs.pop('package_link', self.package_link)
         package_name = self.package_name
 
-        CSS = self.css(ui_color=main_color, tabs_id=tabs_id)
+        CSS = self.css(ui_color=main_color, ui_id=ui_id, tabs_id=tabs_id)
         FOOTER = f'<footer>Generated with <a href="{package}" target="_blank">{package_name}</a></footer>'
 
         return f'<style>{CSS}</style>{HTML}{FOOTER}{JS}'
