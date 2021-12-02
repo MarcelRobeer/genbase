@@ -184,35 +184,62 @@ CUSTOM_CSS = """
 }
 
 #--var(tabs_id) p.info {
-    color: #aaa;
+    color: #898989;
 }
 
-#--var(tabs_id) .instances-wrapper table {
+#--var(tabs_id) .instances-wrapper {
+    max-height: 40rem;
+}
+
+#--var(tabs_id) .table-wrapper {
+    overflow-y: scroll;
+    background:
+    linear-gradient(white 30%, rgba(255, 255, 255, 0)),
+    linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+    radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)),
+    radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+    background:
+    linear-gradient(white 30%, rgba(255, 255, 255, 0)),
+    linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+    radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)),
+    radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+    background-repeat: no-repeat;
+    background-color: white;
+    background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+    background-attachment: local, local, scroll, scroll;
+}
+
+#--var(tabs_id) .table-wrapper table {
+    table-layout: auto;
     width: 100%;
     font-size: 1em;
+    border-collapse: collapse;
 }
 
-#--var(tabs_id) .instances-wrapper tr { 
-    display: flex;
-    align-items: stretch;    
+#--var(tabs_id) .table-wrapper tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
-#--var(tabs_id) .instances-wrapper td:last-child,
-#--var(tabs_id) .instances-wrapper th:last-child {
-    flex: 1;
-    display: inline-block;
+#--var(tabs_id) .table-wrapper tr:hover {
+    background-color: rgba(66, 165, 245, 0.2);
 }
 
-#--var(tabs_id) .instances-wrapper td {
+#--var(tabs_id) .table-wrapper td:nth-child(2),
+#--var(tabs_id) .table-wrapper th:nth-child(2) {
+    width: 99%;
+}
+
+#--var(tabs_id) .table-wrapper tr > td {
+    padding: 1em;
     text-align: left;
 }
 
-#--var(tabs_id) .instances-wrapper th {
+#--var(tabs_id) .table-wrapper th {
     color: #fff;
     background-color: --var(ui_color);
 }
 
-#--var(tabs_id) .instances-wrapper tr > th {
+#--var(tabs_id) .table-wrapper tr > th {
     padding: 1em;
     margin: -0.5em;
 }
@@ -275,7 +302,7 @@ def format_label(label: str, label_name: str = 'Label', h: str = 'h3') -> str:
     return f'<{h}>{label_name.title()}: <kbd>{label}</kbd></{h}>'
 
 
-def format_instance(instance: dict) -> str:
+def format_instance(instance: dict, **kwargs) -> str:
     """Format an `instancelib` instance.
 
     Args:
@@ -286,23 +313,37 @@ def format_instance(instance: dict) -> str:
     """
     repr = instance['_representation'] if '_representation' in instance else instance['_data']
     identifier = instance['_identifier']
-    instance_title = instance['__class__'] + ': ' + ' | '.join([str(i) for i in [identifier, repr]])
-    return f'<tr title={instance_title}><td>{identifier}</td><td>{repr}</td></tr>'
+    instance_title = instance['__class__']
+    optional_columns = ''.join(f'<td>{v}</td>' for v in kwargs.values())
+    return f'<tr title={instance_title}><td>{identifier}</td><td>{repr}</td>{optional_columns}</tr>'
 
 
-def format_instances(instances: Union[dict, List[dict]]) -> str:
+def format_instances(instances: Union[dict, List[dict]], **kwargs) -> str:
     """Format multiple `instancelib` instances.
 
     Args:
         instances (Union[dict, List[dict]]): instances.
+        **kwargs: Optional named columns.
 
     Returns:
         str: Formatted instances.
     """
     if isinstance(instances, dict):
         instances = [instances]
-    return '<div class="instances-wrapper"><table><tr><th>ID</th><th>Instance</th></tr>' + \
-           f'{"".join(format_instance(i) for i in instances)}</table></div>'
+    for k, v in kwargs.items():
+        if isinstance(v, str):
+            kwargs[k] = [v] * len(instances)
+        elif isinstance(v, dict) and 'labelset' in v and 'labeldict' in v:
+            kwargs[k] = {k_: ', '.join([f'<kbd>{v__}</kbd>' for v__ in v_]) for k_, v_ in v['labeldict'].items()}
+        elif not isinstance(v, list):
+            raise ValueError(f'Unable to parse {type(v)} ({v})')
+
+    content = ''.join([format_instance(instance, **{k: v[i] if isinstance(v, list) else v[instance['_identifier']]
+                                                    for k, v in kwargs.items()})
+                       for i, instance in enumerate(instances)])
+    header = ''.join([f'<th>{h}</th>' for h in ['ID', 'Instance'] + [str(k).title() for k in kwargs.keys()]])
+
+    return f'<div class="instances-wrapper table-wrapper"><table><tr>{header}</tr>{content}</table></div>'
 
 
 def is_interactive() -> bool:
@@ -368,6 +409,11 @@ class Render:
         return title
 
     @property
+    def custom_tab_title(self, **renderargs) -> str:
+        """Title of custom tab."""
+        return ''
+
+    @property
     def package_name(self) -> str:
         if hasattr(self, '_package_name'):
             return self._package_name
@@ -431,6 +477,16 @@ class Render:
     def render_subtitle(self, meta: dict, content: dict, **renderargs) -> str:
         return self.format_subtitle(renderargs['subtitle']) if 'subtitle' in renderargs else ''
 
+    def get_renderer(self, meta: dict):
+        """Get a render function (Callable taking `meta`, `content` and `**renderargs` and returning a `str`).
+
+        Args:
+            meta (dict): Meta information to decide on appropriate renderer.
+        """
+        def default_renderer(meta, content, **renderargs):
+            return f'<p>{meta}</p>' + f'<p>{content}</p>'
+        return default_renderer
+
     def render_content(self, meta: dict, content: dict, **renderargs) -> str:
         """Render content as HTML. Overwrite this when subclassing for your custom implementation.
 
@@ -442,7 +498,8 @@ class Render:
         Returns:
             str: Formatted content.
         """
-        return f'<p>{meta}</p>' + f'<p>{content}</p>'
+        renderer = self.get_renderer(meta)
+        return renderer(meta, content, **renderargs)
 
     def render_elements(self, config: dict, **renderargs) -> str:
         """Render HTML title and content.
@@ -458,6 +515,9 @@ class Render:
         return self.render_title(meta, content, **renderargs) + \
             self.render_subtitle(meta, content, **renderargs) + \
             self.render_content(meta, content, **renderargs)
+
+    def custom_tab(self, config: dict, **renderargs) -> str:
+        return ''
 
     def as_html(self, **renderargs) -> str:
         """Get HTML element for interactive environments (e.g. Jupyter notebook).
@@ -488,6 +548,12 @@ class Render:
         tabs_id = f'tabs-{id}'
         ui_id = f'ui-{id}'
 
+        CUSTOM_TAB = ''.join(self.custom_tab(config, **renderargs) for config in self.configs)
+        if CUSTOM_TAB:
+            CUSTOM_TAB = f"""<input type="radio" name="{tabs_id}" id="{tabs_id}-tab2"/>
+                             <label class="wide" for="{tabs_id}-tab2">{self.custom_tab_title}</label>
+                             <div class="tab">{CUSTOM_TAB}</div>"""
+
         HTML = f"""
         <div id="{ui_id}">
             <section class="ui-wrapper">
@@ -497,9 +563,9 @@ class Render:
                             <input type="radio" name="{tabs_id}" id="{tabs_id}-tab1" checked="checked" />
                             <label class="wide" for="{tabs_id}-tab1">{self.tab_title}</label>
                             <div class="tab">{html}</div>
-
-                            <input type="radio" name="{tabs_id}" id="{tabs_id}-tab2" />
-                            <label for="{tabs_id}-tab2">{self.config_title}</label>
+                            {CUSTOM_TAB}
+                            <input type="radio" name="{tabs_id}" id="{tabs_id}-tab{'3' if CUSTOM_TAB else '2'}" />
+                            <label for="{tabs_id}-tab{'3' if CUSTOM_TAB else '2'}">{self.config_title}</label>
                             <div class="tab code">
                                 <section>
                                     <div class="pre-buttons">

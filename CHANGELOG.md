@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.13] - 2021-12-02
+### Added
+- Ability to add a custom second tab to `genbase.ui.notebook.Render`
+- Optional columns to `format_instances()`
+
+### Changed
+- Improved table styling
+
 ## [0.1.12] - 2021-12-01
 ### Fixed
 - Unique identifier of each `genbase.ui.notebook` element
@@ -108,6 +116,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.1.13]: https://pypi.org/project/genbase/0.1.13/
 [0.1.12]: https://pypi.org/project/genbase/0.1.12/
 [0.1.11]: https://pypi.org/project/genbase/0.1.11/
 [0.1.10]: https://pypi.org/project/genbase/0.1.10/
