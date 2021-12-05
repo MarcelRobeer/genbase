@@ -40,7 +40,6 @@ CUSTOM_CSS = """
 #--var(ui_id) a:visited {
     background-color: transparent;
     color: --var(ui_color);
-    border-bottom: 1px dotted;
     line-height: 1.6;
 }
 
@@ -152,13 +151,15 @@ CUSTOM_CSS = """
 }
 
 #--var(tabs_id) .code .pre-buttons {
+    position: inherit;
     float: right;
 }
 
 #--var(tabs_id) .code .pre-buttons > a {
+    position: relative;
     all: unset;
-    padding: 0;
     height: 20px;
+    width: 20px;
     background: none;
     font: inherit;
     outline: inherit;
@@ -170,7 +171,28 @@ CUSTOM_CSS = """
 }
 
 #--var(tabs_id) .code a > svg {
-    transition: stroke ease 0.3s;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 18px;
+}
+
+#--var(tabs_id) .code a.copy:before {
+    content: 'Copied to clipboard!';
+    opacity: 0;
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+    padding: 1rem;
+    color: #fff;
+    background-color: #28a745;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-in-out 2s;
+}
+
+#--var(tabs_id) .code a:active::before {
+    opacity: 1;
+    transition: 0s;
 }
 
 #--var(tabs_id) .code a:hover > svg,
@@ -180,7 +202,7 @@ CUSTOM_CSS = """
 
 #--var(tabs_id) .code a:active > svg,
 #--var(tabs_id) .code a:active > svg > * {
-    stroke: #27ae60;
+    stroke: #28a745;
 }
 
 #--var(tabs_id) p.info {
@@ -569,9 +591,9 @@ class Render:
                             <div class="tab code">
                                 <section>
                                     <div class="pre-buttons">
-                                        <a onclick="copy('json-output')" href="#" title="Copy JSON to clipboard">
-                                            {CLONE_SVG}
-                                        </a>
+                                <a class='copy' onclick="copy('json-output')" href="#" title="Copy JSON to clipboard">
+                                    {CLONE_SVG}
+                                </a>
                                     </div>
                                     <h3>JSON</h3>
                                 </section>
@@ -579,9 +601,9 @@ class Render:
 
                                 <section>
                                     <div class="pre-buttons">
-                                        <a onclick="copy('yaml-output')" href="#" title="Copy YAML to clipboard">
-                                            {CLONE_SVG}
-                                        </a>
+                                <a class='copy' onclick="copy('yaml-output')" href="#" title="Copy YAML to clipboard">
+                                    {CLONE_SVG}
+                                </a>
                                     </div>
                                     <h3>YAML</h3>
                                 </section>
