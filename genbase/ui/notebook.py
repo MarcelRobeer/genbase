@@ -2,7 +2,7 @@
 
 import traceback
 import uuid
-from typing import List, Union
+from typing import List, Optional, Union
 
 import srsly
 from IPython import get_ipython
@@ -387,6 +387,10 @@ def is_interactive() -> bool:
 
 
 class Render:
+    main_color = MAIN_COLOR
+    package_link = PACKAGE_LINK
+    extra_css = ''
+
     def __init__(self, *configs):
         """Base class for rendering configs (configuration dictionaries).
 
@@ -411,9 +415,9 @@ class Render:
         """
         self.configs = self.__validate_configs(configs)
         self.config_title = 'Config'
-        self.main_color = MAIN_COLOR
-        self.package_link = PACKAGE_LINK
-        self.extra_css = ''
+        self.main_color = Render.main_color
+        self.package_link = Render.package_link
+        self.extra_css = Render.extra_css
 
     def __validate_configs(self, *configs):
         configs = [li for subli in configs for li in subli]
