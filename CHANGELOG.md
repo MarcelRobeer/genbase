@@ -5,8 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.1.14] - 2021-12-06
 ### Added
 - Feedback that copy to clipboard was successful
+
+### Fixed
+- Bugfix in rendering `format_instance()`
 
 ## [0.1.13] - 2021-12-02
 ### Added
@@ -118,6 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.1.14]: https://pypi.org/project/genbase/0.1.14/
 [0.1.13]: https://pypi.org/project/genbase/0.1.13/
 [0.1.12]: https://pypi.org/project/genbase/0.1.12/
 [0.1.11]: https://pypi.org/project/genbase/0.1.11/

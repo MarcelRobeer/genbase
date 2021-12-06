@@ -145,6 +145,10 @@ CUSTOM_CSS = """
     position: relative;
 }
 
+#--var(tabs_id) .code section:not(:first-child) {
+    margin-top: 2rem;
+}
+
 #--var(tabs_id) .code h3 {
     font-size: 18px;
     display: inline;
@@ -335,9 +339,9 @@ def format_instance(instance: dict, **kwargs) -> str:
     """
     repr = instance['_representation'] if '_representation' in instance else instance['_data']
     identifier = instance['_identifier']
-    instance_title = instance['__class__']
+    instance_title = instance.get('__class__', '')
     optional_columns = ''.join(f'<td>{v}</td>' for v in kwargs.values())
-    return f'<tr title={instance_title}><td>{identifier}</td><td>{repr}</td>{optional_columns}</tr>'
+    return f'<tr title="{instance_title}"><td>{identifier}</td><td>{repr}</td>{optional_columns}</tr>'
 
 
 def format_instances(instances: Union[dict, List[dict]], **kwargs) -> str:
