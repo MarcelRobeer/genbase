@@ -6,8 +6,10 @@ from typing import Any, Dict, Iterator, List, Optional, Tuple
 import numpy as np
 import sklearn
 import srsly
-from instancelib import (AbstractClassifier, Environment, Instance,
-                         InstanceProvider, LabelProvider)
+from instancelib.environment.base import Environment
+from instancelib.instances.base import Instance, InstanceProvider
+from instancelib.labels.base import LabelProvider
+from instancelib.machinelearning import AbstractClassifier
 
 
 def export_instancelib(obj) -> Dict[str, Any]:

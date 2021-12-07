@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.15] - 2021-12-07
+### Changed
+- Requires `instancelib>=0.3.6.2`
+
+### Fixed
+- Imports from `instancelib` in `utils`
+
 ## [0.1.14] - 2021-12-06
 ### Added
 - Feedback that copy to clipboard was successful

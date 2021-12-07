@@ -2,7 +2,7 @@
 
 import traceback
 import uuid
-from typing import List, Optional, Union
+from typing import List, Union
 
 import srsly
 from IPython import get_ipython
