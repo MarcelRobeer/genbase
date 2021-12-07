@@ -30,9 +30,11 @@ setuptools.setup( # type: ignore
     include_package_data = True,
     install_requires = [
         'instancelib>=0.3.6.2',
+        'matplotlib>=3.5.0',
         'numpy>=1.19.5',
         'python-i18n>=0.3.9',
         'srsly>=2.4.2',
+        'requests',
     ],
     python_requires = '>=3.8'
 )

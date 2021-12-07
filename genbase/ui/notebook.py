@@ -7,6 +7,7 @@ from typing import List, Union
 import srsly
 from IPython import get_ipython
 
+from .plot import plotly_available
 from .svg import CLONE as CLONE_SVG
 
 PACKAGE_LINK = 'https://git.science.uu.nl/m.j.robeer/genbase/'
@@ -256,6 +257,7 @@ CUSTOM_CSS = """
 }
 
 #--var(tabs_id) .table-wrapper tr > td {
+    text-align: left;
     padding: 1em;
     text-align: left;
 }
@@ -266,6 +268,7 @@ CUSTOM_CSS = """
 }
 
 #--var(tabs_id) .table-wrapper tr > th {
+    text-align: left;
     padding: 1em;
     margin: -0.5em;
 }
@@ -383,6 +386,25 @@ def is_interactive() -> bool:
             return True
         return False
     except:  # noqa: E722
+        return False
+
+
+def internet_connection(url: str = 'http://www.pypi.org', timeout: int = 5) -> bool:
+    """Check whether there is an active internet connection, by trying to reach an URL within timeout.
+
+    Args:
+        url (str, optional): URL to connect to. Defaults to 'http://www.pypi.org'.
+        timeout (int, optional): Timeout. Defaults to 5.
+
+    Returns:
+        bool: True if has internet connection, else False.
+    """
+    import requests
+
+    try:
+        requests.get(url, timeout=timeout)
+        return True
+    except (requests.ConnectionError, requests.Timeout):
         return False
 
 
@@ -634,3 +656,8 @@ class Render:
         FOOTER = f'<footer>Generated with <a href="{package}" target="_blank">{package_name}</a></footer>'
 
         return f'<style>{CSS}</style>{HTML}{FOOTER}{JS}'
+
+
+if is_interactive() and not internet_connection() and plotly_available():
+    from plotly.offline import init_notebook_mode
+    init_notebook_mode(connected=False)
