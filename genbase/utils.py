@@ -6,10 +6,14 @@ from typing import Any, Dict, Iterator, List, Optional, Tuple
 import numpy as np
 import sklearn
 import srsly
+from instancelib.analysis.base import (BinaryModelMetrics,
+                                       MulticlassModelMetrics)
 from instancelib.environment.base import Environment
 from instancelib.instances.base import Instance, InstanceProvider
 from instancelib.labels.base import LabelProvider
 from instancelib.machinelearning import AbstractClassifier
+
+ModelMetrics = (BinaryModelMetrics, MulticlassModelMetrics)
 
 
 def export_instancelib(obj) -> Dict[str, Any]:
@@ -18,12 +22,15 @@ def export_instancelib(obj) -> Dict[str, Any]:
         return {'dataset': export_instancelib(obj.dataset),
                 'labels': export_instancelib(obj.labels)}
     elif isinstance(obj, Instance):
-        return {k.lstrip('_'): export_safe(v) for k, v in obj.__dict__.items()}
+        return {k: export_safe(v) for k, v in obj.__dict__.items()}
     elif isinstance(obj, LabelProvider):
         return {'labelset': export_safe(obj._labelset),
                 'labeldict': {k: export_safe(v) for k, v in obj._labeldict.items()}}
-    elif hasattr(obj, 'all_data'):
-        return list(obj.all_data())
+    elif isinstance(obj, InstanceProvider):
+        return [export_instancelib(o) for o in obj.get_all()]
+    elif isinstance(obj, ModelMetrics):
+        return {k: export_safe(getattr(obj, k)) for k in dir(obj)
+                if not k.startswith('_') and not callable(getattr(obj, k))}
     elif hasattr(obj, '__dict__'):
         return dict(recursive_to_dict(obj))
     return export_serializable(obj)
@@ -86,12 +93,21 @@ def recursive_to_dict(nested: Any,
     """
     exclude = [] if exclude is None else exclude
     if include_class and hasattr(nested, '__class__'):
-        yield '__class__', str(nested.__class__).split("'")[1]
-    if hasattr(nested, '__dict__'):
+        cls = str(nested.__class__).split("'")[1]
+        if cls == 'type':
+            yield '__name__', str(nested.__qualname__)
+            return
+        else:
+            yield '__class__', cls
+    if hasattr(nested, '__qualname__') and hasattr(nested, '__annotations__'):
+        yield '__name__', str(nested.__qualname__)
+        nested = nested.__annotations__
+    elif hasattr(nested, '__dict__'):
         nested = nested.__dict__
     for key, value in nested.items():
         if (isinstance(key, str) and not key.startswith('__')) and key not in exclude:
-            if isinstance(value, (AbstractClassifier, Environment, Instance, InstanceProvider, LabelProvider)):
+            if isinstance(value, (AbstractClassifier, Environment, Instance,
+                                  InstanceProvider, LabelProvider, ModelMetrics)):
                 yield export_safe(key), export_instancelib(value)
             elif isinstance(value, (sklearn.base.BaseEstimator)):
                 yield export_safe(key), export_serializable(value)

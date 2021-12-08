@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.17] - 2021-12-08
+### Changed
+- Improved exports in `recursive_to_dict()`
+
 ## [0.1.16] - 2021-12-07
 ### Added
 - Offline rendering for `plotly`
@@ -137,6 +141,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.1.17]: https://pypi.org/project/genbase/0.1.17/
 [0.1.16]: https://pypi.org/project/genbase/0.1.16/
 [0.1.15]: https://pypi.org/project/genbase/0.1.15/
 [0.1.14]: https://pypi.org/project/genbase/0.1.14/
