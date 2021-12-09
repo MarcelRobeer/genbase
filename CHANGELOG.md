@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.18] - 2021-12-09
 ### Fixed
 - Bugfix in online rendering of `plotly` in notebook
+- Bugfix in `import_data()`
 
 ## [0.1.17] - 2021-12-08
 ### Changed

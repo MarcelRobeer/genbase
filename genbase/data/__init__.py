@@ -14,7 +14,7 @@ def import_data(filename: str, *args, **kwargs) -> InstanceProvider:
         Read `test.csv` from the folder `datasets`:
 
         >>> from genbase.data import import_data
-        >>> env = import_data('./datasets/test.csv', data_cols=['fulltext'], label_cols=['label'])
+        >>> env = import_data('./datasets/test.csv', data_cols='fulltext', label_cols='label')
         >>> env.dataset, env.labels
 
     Args:
@@ -29,6 +29,11 @@ def import_data(filename: str, *args, **kwargs) -> InstanceProvider:
     filepath = os.path.abspath(filename)
     _, extension = os.path.splitext(filepath)
     extension = str.lower(extension).replace('.', '')
+
+    if 'data_cols' in kwargs and type(kwargs['data_cols']) is str:
+        kwargs['data_cols'] = [kwargs['data_cols']]
+    if 'label_cols' in kwargs and type(kwargs['label_cols']) is str:
+        kwargs['label_cols'] = [kwargs['label_cols']]
 
     if extension == 'csv':
         return read_csv_dataset(filepath, *args, **kwargs)
