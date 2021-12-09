@@ -658,6 +658,6 @@ class Render:
         return f'<style>{CSS}</style>{HTML}{FOOTER}{JS}'
 
 
-if is_interactive() and not internet_connection() and plotly_available():
+if is_interactive() and plotly_available():
     from plotly.offline import init_notebook_mode
-    init_notebook_mode(connected=False)
+    init_notebook_mode(connected=internet_connection())
