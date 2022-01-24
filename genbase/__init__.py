@@ -77,7 +77,7 @@ class Configurable:
             yaml_or_path (str): File path or YAML string.
         """
         if Path.is_file(yaml_or_path):
-            return cls.read_yaml(yaml_or_path))
+            return cls.read_yaml(yaml_or_path)
         return cls.from_config(srsly.yaml_loads(yaml_or_path))
 
     def to_config(self, exclude: List[str]) -> dict:
