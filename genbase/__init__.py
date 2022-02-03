@@ -57,7 +57,7 @@ class Configurable:
             **read_args: Optional arguments passed to `srsly.read_json()`/`srsly.read_jsonl()`/`srsly.read_gzip_json`.
         """
         if Path.is_file(json_or_path):
-            cls.read_json(json_or_path, **read_args)
+            return cls.read_json(json_or_path, **read_args)
         return cls.from_config(srsly.json_loads(json_or_path))
 
     @classmethod
@@ -67,7 +67,7 @@ class Configurable:
         Args:
             path (str): File path.
         """
-        return srsly.read_yaml(path)
+        return cls.from_config(srsly.read_yaml(path))
 
     @classmethod
     def from_yaml(cls, yaml_or_path: str) -> 'Configurable':
@@ -77,7 +77,7 @@ class Configurable:
             yaml_or_path (str): File path or YAML string.
         """
         if Path.is_file(yaml_or_path):
-            return cls.from_config(cls.read_yaml(yaml_or_path))
+            return cls.read_yaml(yaml_or_path)
         return cls.from_config(srsly.yaml_loads(yaml_or_path))
 
     def to_config(self, exclude: List[str]) -> dict:
