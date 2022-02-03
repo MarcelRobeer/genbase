@@ -35,6 +35,7 @@ setuptools.setup( # type: ignore
         'python-i18n>=0.3.9',
         'srsly>=2.4.2',
         'requests',
+        'ipython>=7.30.1'
     ],
     python_requires = '>=3.8'
 )
