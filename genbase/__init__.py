@@ -6,6 +6,7 @@ from typing import List, Optional
 
 import srsly
 
+from genbase._version import __version__
 from genbase.data import import_data, train_test_split
 from genbase.decorator import add_callargs
 from genbase.internationalization import (LOCALE_MAP, get_locale, set_locale,
@@ -203,6 +204,3 @@ class MetaInfo(Configurable):
 
     def _repr_html_(self) -> str:
         return self._renderer(self.to_config()).as_html(**self.renderargs) if is_interactive() else repr(self)
-
-
-__version__ = '0.1.18'

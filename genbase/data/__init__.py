@@ -1,15 +1,12 @@
 """Data imports, sampling and generation."""
 
-from typing import Dict, Iterator, List, Literal, Union
-from instancelib.typehints import KT, VT
+from pathlib import Path
+from typing import Dict, Iterator, List, Literal, Tuple, Union
+from zipfile import ZipExtFile
 
 import instancelib as il
 import pandas as pd
-
-
-from pathlib import Path
-from zipfile import ZipExtFile
-
+from instancelib.typehints import KT, VT
 
 Method = Literal['infer', 'glob', 'pandas']
 
@@ -172,7 +169,7 @@ def import_data(dataset,
     raise NotImplementedError(f'Unable to import "{dataset}"!')
 
 
-def import_from_key_values(iterator: Iterator[KT, VT],
+def import_from_key_values(iterator: Iterator[Tuple[KT, VT]],
                            data_cols: Union[KT, List[KT]],
                            label_cols: Union[KT, List[KT]],
                            method: Method = 'infer',
