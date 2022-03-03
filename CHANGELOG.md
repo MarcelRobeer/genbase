@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.1.18] - 2022-03-03
 ### Added
 - Examples to `import_data()`
 
@@ -16,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Bugfix in `Configurable.read_yaml()`
 
-## [0.1.18] - 2021-02-03
+## [0.1.18] - 2022-02-03
 ### Fixed
 - Bugfix in online rendering of `plotly` in notebook
 - Bugfix in `import_data()`
