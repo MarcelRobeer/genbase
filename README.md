@@ -92,8 +92,42 @@ Wrapper functions for working with data.
 
 | Function | Description |
 |----------|-------------|
-| `import_data()` | Import dataset using `instancelib`, currently supporting CSV and Excel files. |
+| `import_data()` | Import dataset into an `instancelib.Environment` (containing instances and ground-truth labels). |
 | `train_test_split()` | Split a dataset into training and test data. |
+
+_Examples_:
+Import from an online .csv file for the [BBC News dataset](http://mlg.ucd.ie/datasets/bbc.html) with data in the 'text' column and labels in 'category':
+```python
+>>> from genbase import import_data
+>>> import_data('https://storage.googleapis.com/dataset-uploader/bbc/bbc-text.csv',
+...             data_cols='text', label_cols='category')
+TextEnvironment
+```
+
+Convert a pandas DataFrame to instancelib Environment:
+```python
+>>> from genbase import import_data
+>>> import pandas as pd
+>>> df = pd.read_csv('./Downloads/bbc-text.csv')
+>>> import_data(df, data_cols=['text'], label_cols=['category'])
+TextEnvironment
+```
+
+Download a .zip file of the [Drugs.com review dataset](https://archive.ics.uci.edu/ml/datasets/Drug+Review+Dataset+%28Drugs.com%29#) and convert each file in the ZIP to an instancelib Environment:
+```python
+>>> from genbase import import_data
+>>> import_data('https://archive.ics.uci.edu/ml/machine-learning-databases/00462/drugsCom_raw.zip',
+...             data_cols='review', label_cols='rating')
+{'drugsComTest_raw.tsv': TextEnvironment, 'drugsComTest_raw.tsv': TextEnvironment}
+```
+
+Convert a huggingface Dataset ([SST2 in Glue](https://huggingface.co/datasets/glue)) to an instancelib Environment:
+```python
+>>> from genbase import import_data
+>>> from datasets import load_dataset
+>>> import_data(load_dataset('glue', 'sst2'), data_cols='sentence', label_cols='label')
+{'train': TextEnvironment, 'test': TextEnvironment, 'validation': TextEnvironment}
+```
 
 <a name="genbase-decorator"></a>
 ### `genbase.decorator`

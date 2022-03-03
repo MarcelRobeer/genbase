@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Examples to `import_data()`
+
+### Changed
+- Extended `import_data()` to handle more input types
+- Requires `instancelib>=0.4.0.0`
+- Train/test splits are added to the environment itself
+
 ### Fixed
 - Bugfix in `Configurable.read_yaml()`
 
