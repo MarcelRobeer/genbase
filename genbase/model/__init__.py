@@ -102,8 +102,8 @@ def import_model(model,
         file_type = get_file_type(model)
         if file_type == '.pkl':
             import pickle
-            info('Unpickling model')
-            model = pickle.load(model)
+            info('Unpickling model (warning: be sure you trust a source before unpickling a model!)')
+            model = pickle.load(model)  # nosec
         elif file_type == '.onnx':
             if not package_available('ilonnx'):
                 raise ImportError('To import ONNX files install `instancelib-onnx`!')
