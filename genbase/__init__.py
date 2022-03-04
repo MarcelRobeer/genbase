@@ -12,7 +12,7 @@ from genbase.decorator import add_callargs
 from genbase.internationalization import (LOCALE_MAP, get_locale, set_locale,
                                           translate_list, translate_string)
 from genbase.mixin import CaseMixin, SeedMixin
-from genbase.model import from_sklearn
+from genbase.model import import_model
 from genbase.ui import Render, is_interactive
 from genbase.utils import recursive_to_dict
 

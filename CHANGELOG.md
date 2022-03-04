@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2022-03-04
+### Added
+- Added `model.import_model()` to import models
+- `instancelib-onnx` as a dependency
+- Information logging
+
+### Changed
+- `from_sklearn()` is part of `import_model()`
+- Multiple part in `import_data()` now return a single Environment
+- Updated README.md to include new functionalities
+- Changed location of `model` subpackage
+
 ## [0.2.0] - 2022-03-03
 ### Added
 - Examples to `import_data()`
@@ -159,6 +171,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.2.1]: https://pypi.org/project/genbase/0.2.1/
+[0.2.0]: https://pypi.org/project/genbase/0.2.0/
 [0.1.18]: https://pypi.org/project/genbase/0.1.18/
 [0.1.17]: https://pypi.org/project/genbase/0.1.17/
 [0.1.16]: https://pypi.org/project/genbase/0.1.16/

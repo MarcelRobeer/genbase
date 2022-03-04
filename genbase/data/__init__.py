@@ -1,12 +1,12 @@
 """Data imports, sampling and generation."""
 
-from pathlib import Path
 from typing import Dict, Iterator, List, Literal, Tuple, Union
-from zipfile import ZipExtFile
 
 import instancelib as il
 import pandas as pd
 from instancelib.typehints import KT, VT
+
+from ..utils import get_file_type, info
 
 Method = Literal['infer', 'glob', 'pandas']
 
@@ -45,20 +45,17 @@ def get_compressed_files(ioargs):
             return [handle.open(name) for name in zip_names]
     raise NotImplementedError(f'Unable to process "{handle}" with compressiong method "{compression}"!')
 
-    
-def get_file_type(dataset):
-    if isinstance(dataset, ZipExtFile):
-        dataset = dataset.name
-    if isinstance(dataset, str):
-        return str.lower(Path(dataset).suffix)
-    return None
+
+def pandas_to_instancelib(dataset, data_cols, label_cols):
+    return il.pandas_to_env(dataset, data_cols, label_cols)
 
 
 def import_data(dataset,
                 data_cols: Union[KT, List[KT]],
                 label_cols: Union[KT, List[KT]],
                 method: Method = 'infer',
-                **read_kwargs) -> Union[il.Environment, Dict[KT, il.Environment]]:
+                _to_instancelib: bool = True,
+                **read_kwargs) -> Union[il.Environment, pd.DataFrame]:
     """Import data in an instancelib Environment.
 
     Examples:
@@ -89,6 +86,7 @@ def import_data(dataset,
         label_cols (Union[KT, List[KT]]): Name of column(s) containing labels.
         method (Method, optional): Method used to import data. Choose from 'infer', 'glob', 'pandas'.
             Defaults to 'infer'.
+        _to_instancelib (bool, optional): Whether to convert the final result to instancelib. Defaults to True.
         **read_kwargs: Optional arguments passed to reading call.
 
     Raises:
@@ -97,7 +95,7 @@ def import_data(dataset,
         NotImplementedError: Import not yet implemented.
 
     Returns:
-        Union[il.Environment, Dict[KT, il.Environment]]: Environment for each file or dataset provided.
+        Union[il.Environment, pd.DataFrame]: Environment for each file or dataset provided.
     """
     if method not in METHODS:
         raise ValueError(f'Unknown method "{method}", choose from {METHODS}.')
@@ -113,7 +111,7 @@ def import_data(dataset,
     # Unpack archived file
     if file_type in pd.io.common._compression_to_extension.values():
         ioargs = pd.io.common._get_filepath_or_buffer(dataset, compression=file_type.replace('.', ''))
-        print(f'> Unpacking file "{dataset}".')
+        info(f'Unpacking file "{dataset}".')
         return import_from_key_values([(file.name, file) for file in get_compressed_files(ioargs)],
                                       data_cols=data_cols,
                                       label_cols=label_cols,
@@ -139,7 +137,7 @@ def import_data(dataset,
     # Read one file with Pandas
     if method == 'pandas':
         if file_type is not None:
-            print(f'> Reading file "{dataset}".')
+            info(f'Reading file "{dataset}".')
             if file_type in ['.csv', '.tsv', '.txt']:
                 if 'sep' not in read_kwargs:
                     if file_type == '.csv':
@@ -157,16 +155,17 @@ def import_data(dataset,
                 raise ImportError(f'Unable to process file type "{file_type}" with method "pandas"!')
 
     if hasattr(dataset, 'to_pandas') and callable(dataset.to_pandas):
-        print(f'> Preparing "{dataset}" for import with Pandas.'.replace('\n', ' ').replace('\t', ''))
+        info(f'Preparing "{dataset}" for import with Pandas.'.replace('\n', ' ').replace('\t', ''))
         dataset = dataset.to_pandas()
-    if isinstance(dataset, pd.DataFrame):
-        return il.pandas_to_env(dataset, data_cols=data_cols, label_cols=label_cols)
-    elif hasattr(dataset, 'items') and callable(dataset.items):
+    elif isinstance(dataset, dict):
         return import_from_key_values(dataset.items(),
                                       data_cols=data_cols,
                                       label_cols=label_cols,
                                       **read_kwargs)
-    raise NotImplementedError(f'Unable to import "{dataset}"!')
+
+    if _to_instancelib:
+        return pandas_to_instancelib(dataset, data_cols=data_cols, label_cols=label_cols)
+    return dataset
 
 
 def import_from_key_values(iterator: Iterator[Tuple[KT, VT]],
@@ -174,8 +173,10 @@ def import_from_key_values(iterator: Iterator[Tuple[KT, VT]],
                            label_cols: Union[KT, List[KT]],
                            method: Method = 'infer',
                            **read_kwargs) -> Dict[KT, il.Environment]:
-    return {k: import_data(v, data_cols=data_cols, label_cols=label_cols, method=method, **read_kwargs)
-            for k, v in iterator}
+    dataset = {k: import_data(v, data_cols=data_cols, label_cols=label_cols,
+                              method=method, _to_instancelib=False, **read_kwargs)
+               for k, v in iterator}
+    return pandas_to_instancelib(dataset, data_cols=data_cols, label_cols=label_cols)
 
 
 def train_test_split(environment: il.Environment,

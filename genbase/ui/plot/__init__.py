@@ -7,6 +7,8 @@ import pandas as pd
 import plotly
 import plotly.io as pio
 
+from ...utils import package_available
+
 ROOT_DIR = os.path.dirname(os.path.abspath(plotly.__file__))
 PACKAGE_DIR = os.path.join(ROOT_DIR, 'package_data')
 PLOTLYJS_FILE = os.path.join(PACKAGE_DIR, 'plotly.min.js')
@@ -18,8 +20,7 @@ def matplotlib_available() -> bool:
     Returns:
         bool: True if available, False if not.
     """
-    import importlib.util
-    return importlib.util.find_spec('matplotlib') is not None
+    return package_available('matplotlib')
 
 
 def plotly_available() -> bool:

@@ -1,7 +1,11 @@
 """Utility functions."""
 
 import base64
+import importlib.util
+import warnings
+from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Tuple
+from zipfile import ZipExtFile
 
 import numpy as np
 import sklearn
@@ -12,6 +16,7 @@ from instancelib.environment.base import Environment
 from instancelib.instances.base import Instance, InstanceProvider
 from instancelib.labels.base import LabelProvider
 from instancelib.machinelearning import AbstractClassifier
+
 
 ModelMetrics = (BinaryModelMetrics, MulticlassModelMetrics)
 
@@ -115,3 +120,37 @@ def recursive_to_dict(nested: Any,
                 yield export_safe(key), dict(recursive_to_dict(value, exclude=exclude, include_class=include_class))
             else:
                 yield export_safe(key), export_safe(value)
+
+
+def get_file_type(pathlike: str) -> Optional[str]:
+    """Get file type of a pathlike string.
+
+    Args:
+        pathlike (str): Pathlike string.
+
+    Returns:
+        Optional[str]: File extension or None.
+    """
+    if isinstance(pathlike, ZipExtFile):
+        pathlike = pathlike.name
+    if isinstance(pathlike, str):
+        return str.lower(Path(pathlike).suffix)
+    return None
+
+
+def package_available(package: str) -> bool:
+    """Check if package is installed.
+
+    Args:
+        package (str): Name of package.
+
+    Returns:
+        bool: Whether the package is available (True) or not (False).
+    """
+    return importlib.util.find_spec(package) is not None
+
+
+def info(message):
+    """Print an informational message."""
+    warnings.formatwarning = lambda msg, *args, **kwargs: f'{msg}\n'
+    warnings.warn(f'[INFO] {message}')

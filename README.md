@@ -101,7 +101,7 @@ Import from an online .csv file for the [BBC News dataset](http://mlg.ucd.ie/dat
 >>> from genbase import import_data
 >>> import_data('https://storage.googleapis.com/dataset-uploader/bbc/bbc-text.csv',
 ...             data_cols='text', label_cols='category')
-TextEnvironment
+TextEnvironment()
 ```
 
 Convert a pandas DataFrame to instancelib Environment:
@@ -110,7 +110,7 @@ Convert a pandas DataFrame to instancelib Environment:
 >>> import pandas as pd
 >>> df = pd.read_csv('./Downloads/bbc-text.csv')
 >>> import_data(df, data_cols=['text'], label_cols=['category'])
-TextEnvironment
+TextEnvironment()
 ```
 
 Download a .zip file of the [Drugs.com review dataset](https://archive.ics.uci.edu/ml/datasets/Drug+Review+Dataset+%28Drugs.com%29#) and convert each file in the ZIP to an instancelib Environment:
@@ -118,7 +118,7 @@ Download a .zip file of the [Drugs.com review dataset](https://archive.ics.uci.e
 >>> from genbase import import_data
 >>> import_data('https://archive.ics.uci.edu/ml/machine-learning-databases/00462/drugsCom_raw.zip',
 ...             data_cols='review', label_cols='rating')
-{'drugsComTest_raw.tsv': TextEnvironment, 'drugsComTest_raw.tsv': TextEnvironment}
+TextEnvironment(named_providers=['drugsComTest_raw.tsv', 'drugsComTrain_raw.tsv'])
 ```
 
 Convert a huggingface Dataset ([SST2 in Glue](https://huggingface.co/datasets/glue)) to an instancelib Environment:
@@ -126,7 +126,7 @@ Convert a huggingface Dataset ([SST2 in Glue](https://huggingface.co/datasets/gl
 >>> from genbase import import_data
 >>> from datasets import load_dataset
 >>> import_data(load_dataset('glue', 'sst2'), data_cols='sentence', label_cols='label')
-{'train': TextEnvironment, 'test': TextEnvironment, 'validation': TextEnvironment}
+TextEnvironment(named_providers=['test', 'train', 'validation'])
 ```
 
 <a name="genbase-decorator"></a>
@@ -220,7 +220,30 @@ Wrapper functions for working with machine learning models.
 
 | Function | Description |
 |----------|-------------|
-| `from_sklearn()` | Wrap a scikit-learn model. |
+| `import_data()` | Import a model with instancelib or instancelib-onnx. |
+
+_Examples_:
+Make a scikit-learn text classifier and train it on SST2
+```python
+>>> from genbase import import_data, import_model
+>>> from datasets import load_dataset
+>>> ds = import_data(load_dataset('glue', 'sst2'), data_cols='sentence', label_cols='label')
+>>> from sklearn.pipeline import Pipeline
+>>> from sklearn.naive_bayes import MultinomialNB
+>>> from sklearn.feature_extraction.text import TfidfVectorizer
+>>> pipeline = Pipeline([('tfidf', TfidfVectorizer()),
+...                      ('clf', MultinomialNB())])
+>>> import_model(pipeline, ds, train='train')
+SklearnDataClassifier()
+```
+
+Load a [pretrained ONNX model](https://github.com/mpbron/instancelib-onnx/blob/main/example_models/data-model.onnx) 
+with labels 'Bedrijfsnieuws', 'Games' and 'Smartphones'
+```python
+>>> from genbase import import_model
+>>> import_model('data-model.onnx', label_map={0: 'Bedrijfsnieuws', 1: 'Games', 2: 'Smartphones'})
+SklearnDataClassifier()
+```
 
 <a name="genbase-ui"></a>
 ### `genbase.ui`
