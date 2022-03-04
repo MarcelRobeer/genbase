@@ -101,7 +101,7 @@ def import_model(model,
             raise ImportError(f'Unable to locate file "{model}"')
         file_type = get_file_type(model)
         if file_type == '.pkl':
-            import pickle
+            import pickle  # nosec
             info('Unpickling model (warning: be sure you trust a source before unpickling a model!)')
             model = pickle.load(model)  # nosec
         elif file_type == '.onnx':
