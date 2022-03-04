@@ -17,7 +17,6 @@ from instancelib.instances.base import Instance, InstanceProvider
 from instancelib.labels.base import LabelProvider
 from instancelib.machinelearning import AbstractClassifier
 
-
 ModelMetrics = (BinaryModelMetrics, MulticlassModelMetrics)
 
 
