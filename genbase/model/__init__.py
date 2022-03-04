@@ -110,8 +110,6 @@ def import_model(model,
             import ilonnx
             if label_map is None:
                 info('Improve the informativeness of your predictions by providing the label_map')
-                raise ImportError('To build a model with `instancelib-onnx` provide a mapping of labels to' +
-                                  ' named labels with label_map!')
             return ilonnx.build_data_model(model, classes=label_map)
     elif isinstance(model, AbstractClassifier):
         return model
