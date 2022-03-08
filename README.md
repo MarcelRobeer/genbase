@@ -269,7 +269,7 @@ _Example_:
 >>> class CustomRender(Render):
 ...     def __init__(self, *configs):
 ...         super().__init__(*configs)
-...         self.tab_title = 'My Custom Explanation'
+...         self.default_title = 'My Custom Explanation'
 ...         self.main_color = '#ff00000'
 ...         self.package_link = 'https://git.io/text_explainability'
 ...

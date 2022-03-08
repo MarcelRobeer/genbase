@@ -7,7 +7,7 @@ from typing import List, Optional
 import srsly
 
 from genbase._version import __version__
-from genbase.data import import_data, train_test_split
+from genbase.data import import_data, rename_labels, train_test_split
 from genbase.decorator import add_callargs
 from genbase.internationalization import (LOCALE_MAP, get_locale, set_locale,
                                           translate_list, translate_string)

@@ -1,6 +1,7 @@
 """Data imports, sampling and generation."""
 
-from typing import Callable, Dict, Iterator, List, Literal, Optional, Tuple, Union
+from typing import (Callable, Dict, Iterator, List, Literal, Optional, Tuple,
+                    Union)
 
 import instancelib as il
 import pandas as pd
@@ -46,17 +47,19 @@ def get_compressed_files(ioargs):
     raise NotImplementedError(f'Unable to process "{handle}" with compressiong method "{compression}"!')
 
 
-def pandas_to_instancelib(dataset, data_cols, label_cols, label_rename=None):
+def pandas_to_instancelib(dataset, data_cols, label_cols, label_map=None):
     env = il.pandas_to_env(dataset, data_cols, label_cols)
-    if label_rename is not None:
-        env = rename_labels(env, label_rename)
+    if label_map is not None:
+        if isinstance(label_map, dict):
+            label_map = {str(k): v for k, v in label_map.items()}
+        env = rename_labels(env, label_map)
     return env
 
 
 def import_data(dataset,
                 data_cols: Union[KT, List[KT]],
                 label_cols: Union[KT, List[KT]],
-                label_rename: Optional[Union[Callable, dict]] = None,
+                label_map: Optional[Union[Callable, dict]] = None,
                 method: Method = 'infer',
                 _to_instancelib: bool = True,
                 **read_kwargs) -> Union[il.Environment, pd.DataFrame]:
@@ -88,7 +91,7 @@ def import_data(dataset,
         dataset (_type_): Dataset to import.
         data_cols (Union[KT, List[KT]]): Name of column(s) containing data.
         label_cols (Union[KT, List[KT]]): Name of column(s) containing labels.
-        label_rename (, optional): Defaults to None.
+        label_map (Optional[Union[Callable, dict]], optional): Label renaming dictionary/function. Defaults to None.
         method (Method, optional): Method used to import data. Choose from 'infer', 'glob', 'pandas'.
             Defaults to 'infer'.
         _to_instancelib (bool, optional): Whether to convert the final result to instancelib. Defaults to True.
@@ -120,6 +123,7 @@ def import_data(dataset,
         return import_from_key_values([(file.name, file) for file in get_compressed_files(ioargs)],
                                       data_cols=data_cols,
                                       label_cols=label_cols,
+                                      label_map=label_map,
                                       method=method,
                                       **read_kwargs)
 
@@ -136,6 +140,7 @@ def import_data(dataset,
         return import_from_key_values([(file, file) for file in glob.glob(dataset)],
                                       data_cols=data_cols,
                                       label_cols=label_cols,
+                                      label_map=label_map,
                                       method=method,
                                       **read_kwargs)
 
@@ -166,22 +171,24 @@ def import_data(dataset,
         return import_from_key_values(dataset.items(),
                                       data_cols=data_cols,
                                       label_cols=label_cols,
+                                      label_map=label_map,
                                       **read_kwargs)
 
     if _to_instancelib:
-        return pandas_to_instancelib(dataset, data_cols=data_cols, label_cols=label_cols, label_rename=label_rename)
+        return pandas_to_instancelib(dataset, data_cols=data_cols, label_cols=label_cols, label_map=label_map)
     return dataset
 
 
 def import_from_key_values(iterator: Iterator[Tuple[KT, VT]],
                            data_cols: Union[KT, List[KT]],
                            label_cols: Union[KT, List[KT]],
+                           label_map: Optional[Union[Callable, dict]] = None,
                            method: Method = 'infer',
                            **read_kwargs) -> Dict[KT, il.Environment]:
     dataset = {k: import_data(v, data_cols=data_cols, label_cols=label_cols,
                               method=method, _to_instancelib=False, **read_kwargs)
                for k, v in iterator}
-    return pandas_to_instancelib(dataset, data_cols=data_cols, label_cols=label_cols)
+    return pandas_to_instancelib(dataset, data_cols=data_cols, label_cols=label_cols, label_map=label_map)
 
 
 def train_test_split(environment: il.Environment,
@@ -219,9 +226,9 @@ def rename_labels(provider: Union[il.Environment, il.LabelProvider],
     """
     is_environment = isinstance(provider, il.Environment)
     _provider = provider.labels if is_environment else provider
-    _provider = il.MemoryEnvironment.rename_labels(_provider, mapping)
+    _provider = il.MemoryLabelProvider.rename_labels(_provider, mapping)
     if is_environment:
-        provider.labels = _provider
+        provider._labelprovider = _provider
     else:
         provider = _provider
     return provider

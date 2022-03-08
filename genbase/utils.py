@@ -24,7 +24,8 @@ def export_instancelib(obj) -> Dict[str, Any]:
     """`instancelib`-specific safe exports."""
     if isinstance(obj, Environment):
         return {'dataset': export_instancelib(obj.dataset),
-                'labels': export_instancelib(obj.labels)}
+                'labels': export_instancelib(obj.labels),
+                'named_providers': export_instancelib(obj.named_providers)}
     elif isinstance(obj, Instance):
         return {k: export_safe(v) for k, v in obj.__dict__.items()}
     elif isinstance(obj, LabelProvider):
@@ -69,6 +70,8 @@ def export_safe(obj):
         return float(obj)
     elif isinstance(obj, np.ndarray):
         return obj.tolist()
+    elif hasattr(obj, 'to_dict') and callable(obj.to_dict):
+        return obj.to_dict()
     elif isinstance(obj, np.str):
         return str(obj)
     elif isinstance(obj, (frozenset, set)):
@@ -108,6 +111,8 @@ def recursive_to_dict(nested: Any,
         nested = nested.__annotations__
     elif hasattr(nested, '__dict__'):
         nested = nested.__dict__
+    if not hasattr(nested, 'items'):
+        nested = dict(nested)
     for key, value in nested.items():
         if (isinstance(key, str) and not key.startswith('__')) and key not in exclude:
             if isinstance(value, (AbstractClassifier, Environment, Instance,
@@ -115,7 +120,7 @@ def recursive_to_dict(nested: Any,
                 yield export_safe(key), export_instancelib(value)
             elif isinstance(value, (sklearn.base.BaseEstimator)):
                 yield export_safe(key), export_serializable(value)
-            elif hasattr(value, '__dict__'):
+            elif hasattr(value, '__dict__') or isinstance(value, dict):
                 yield export_safe(key), dict(recursive_to_dict(value, exclude=exclude, include_class=include_class))
             else:
                 yield export_safe(key), export_safe(value)
@@ -147,6 +152,25 @@ def package_available(package: str) -> bool:
         bool: Whether the package is available (True) or not (False).
     """
     return importlib.util.find_spec(package) is not None
+
+
+def extract_metrics(metrics: dict) -> Tuple[dict, list]:
+    # Get all unique property names
+    properties = []
+
+    for v in metrics.values():
+        for p in dir(v):
+            if not p.startswith('_') and not callable(getattr(v, p)) and p not in properties:
+                properties.append(p)
+
+    # Extract property values
+    def extract_property(m, p):
+        res = getattr(m, p, None)
+        if isinstance(res, frozenset):
+            res = len(res)
+        return res
+
+    return {k: {p: extract_property(v, p) for p in properties} for k, v in metrics.items()}, properties
 
 
 def info(message):

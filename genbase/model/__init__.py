@@ -95,6 +95,8 @@ def import_model(model,
     """
     if label_map is None and environment is not None:
         label_map = list(environment.labels.labelset)
+    if isinstance(label_map, dict):
+        label_map = {str(k): v for k, v in label_map.items()}
 
     if isinstance(model, str):
         if not Path(model).exists():

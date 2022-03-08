@@ -418,13 +418,13 @@ class Render:
 
         Example:
             Writing your own custom rendering functions `format_title()` and `render_content()`, and give the tab 
-            a custom title `tab_title`, set the main UI color to red (`#ff0000`) and package link (URL in footer):
+            a custom title `default_title`, set the main UI color to red (`#ff0000`) and package link (URL in footer):
 
             >>> from genbase.ui.notebook import Render
             >>> class CustomRender(Render):
             ...     def __init__(self, *configs):
             ...         super().__init__(*configs)
-            ...         self.tab_title = 'My Custom Explanation'
+            ...         self.default_title = 'My Custom Explanation'
             ...         self.main_color = '#ff00000'
             ...         self.package_link = 'https://git.io/text_explainability'
             ...
@@ -436,6 +436,7 @@ class Render:
             ...         return type.replace(' ').title() if 'explanation' in type else type
         """
         self.configs = self.__validate_configs(configs)
+        self.default_title = 'Explanation'
         self.config_title = 'Config'
         self.main_color = Render.main_color
         self.package_link = Render.package_link
@@ -452,7 +453,7 @@ class Render:
     @property
     def tab_title(self, **renderargs) -> str:
         """Title of content tab."""
-        title = 'Explanation'
+        title = self.default_title
         titles = [config['META']['title'] for config in self.configs if 'title' in config['META']]
         if titles:
             title = ' | '.join(list(set(titles)))
