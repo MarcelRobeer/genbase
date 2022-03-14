@@ -70,7 +70,7 @@ def export_safe(obj):
         return float(obj)
     elif isinstance(obj, np.ndarray):
         return obj.tolist()
-    elif hasattr(obj, 'to_dict') and callable(obj.to_dict):
+    elif 'pandas' in str(type(obj)).lower() and hasattr(obj, 'to_dict') and callable(obj.to_dict):
         return obj.to_dict()
     elif isinstance(obj, np.str):
         return str(obj)
@@ -103,6 +103,9 @@ def recursive_to_dict(nested: Any,
         cls = str(nested.__class__).split("'")[1]
         if cls == 'type':
             yield '__name__', str(nested.__qualname__)
+            return
+        elif 'blackboxclassifier' in str.lower(cls):
+            yield 'BLACKBOX', 'HAS_CONTENTS_HIDDEN_<3_SO_STOP_PEEKING_:)'
             return
         else:
             yield '__class__', cls

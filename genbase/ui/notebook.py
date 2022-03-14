@@ -1,8 +1,9 @@
 """Jupyter notebook rendering interface."""
 
+import copy
 import traceback
 import uuid
-from typing import List, Union
+from typing import Callable, List, Optional, Union
 
 import srsly
 from IPython import get_ipython
@@ -329,6 +330,15 @@ def format_label(label: str, label_name: str = 'Label', h: str = 'h3') -> str:
         str: Formatted label title.
     """
     return f'<{h}>{label_name.title()}: <kbd>{label}</kbd></{h}>'
+
+
+def format_list(items, format_fn: Optional[Union[Callable, str]] = None):
+    if format_fn is None:
+        format_fn = lambda x: x
+    elif format_fn is str:
+        _format_fn = copy.deepcopy(format_fn)
+        format_fn = lambda x: f'<{_format_fn}>{x}</{_format_fn}>'
+    return '<ul>' + ''.join(f'<li>{format_fn(str(item))}</li>' for item in items) + '</ul>'
 
 
 def format_instance(instance: dict, **kwargs) -> str:
