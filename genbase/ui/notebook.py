@@ -334,10 +334,10 @@ def format_label(label: str, label_name: str = 'Label', h: str = 'h3') -> str:
 
 def format_list(items, format_fn: Optional[Union[Callable, str]] = None):
     if format_fn is None:
-        format_fn = lambda x: x
+        format_fn = lambda x: x  # noqa: E731
     elif format_fn is str:
         _format_fn = copy.deepcopy(format_fn)
-        format_fn = lambda x: f'<{_format_fn}>{x}</{_format_fn}>'
+        format_fn = lambda x: f'<{_format_fn}>{x}</{_format_fn}>'  # noqa: E731
     return '<ul>' + ''.join(f'<li>{format_fn(str(item))}</li>' for item in items) + '</ul>'
 
 
