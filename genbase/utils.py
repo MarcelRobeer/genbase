@@ -80,6 +80,8 @@ def export_safe(obj):
         return [dict(recursive_to_dict(o)) if hasattr(o, '__dict__') else export_safe(o) for o in obj]
     elif isinstance(obj, dict):
         return dict(export_dict(obj))
+    elif 'tensorflow.' in str(type(obj)).lower() or 'torch.' in str(type(obj)).lower():
+        return 'TODO-EXPORT-TF-TORCH'
     elif callable(obj):
         return export_serializable(obj)
     return obj
@@ -107,7 +109,7 @@ def recursive_to_dict(nested: Any,
         elif 'blackboxclassifier' in str.lower(cls):
             yield 'BLACKBOX', 'HAS_CONTENTS_HIDDEN_<3_SO_STOP_PEEKING_:)'
             return
-        else:
+        elif cls != 'dict':
             yield '__class__', cls
     if hasattr(nested, '__qualname__') and hasattr(nested, '__annotations__'):
         yield '__name__', str(nested.__qualname__)
@@ -161,14 +163,21 @@ def extract_metrics(metrics: dict) -> Tuple[dict, list]:
     # Get all unique property names
     properties = []
 
+    def safe_getattr(obj, name):
+        try:
+            return getattr(obj, name, None)
+        except Exception as e:
+            warning(e)
+            return type(e).__name__
+
     for v in metrics.values():
         for p in dir(v):
-            if not p.startswith('_') and not callable(getattr(v, p)) and p not in properties:
+            if not p.startswith('_') and not callable(safe_getattr(v, p)) and p not in properties:
                 properties.append(p)
 
     # Extract property values
     def extract_property(m, p):
-        res = getattr(m, p, None)
+        res = safe_getattr(m, p)
         if isinstance(res, frozenset):
             res = len(res)
         return res
@@ -180,3 +189,9 @@ def info(message):
     """Print an informational message."""
     warnings.formatwarning = lambda msg, *args, **kwargs: f'{msg}\n'
     warnings.warn(f'[INFO] {message}')
+
+
+def warning(message):
+    """Print a warning message."""
+    warnings.formatwarning = lambda msg, *args, **kwargs: f'{msg}\n'
+    warnings.warn(f'[EXCEPTION] {message}')
