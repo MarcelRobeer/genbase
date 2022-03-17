@@ -1,13 +1,14 @@
 """Base support for decorators."""
 
 import inspect
+from functools import wraps
 
 from genbase.utils import recursive_to_dict
 
 
 def add_callargs(function):
     """Decorator that passes `__callargs__`  to a function if available. Useful in conjunction with `MetaInfo`."""
-
+    @wraps(function)
     def inner(*args, **kwargs):
         ba = inspect.signature(function).bind(*args, **kwargs)
         ba.apply_defaults()
