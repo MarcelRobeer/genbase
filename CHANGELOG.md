@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.6] - 2022-03-21
+### Changed
+- Lazy evaluation of internationalization functions
+
 ## [0.2.5] - 2022-03-17
 ### Fixed
 - Pass on docstrings with `@add_callargs`
@@ -198,6 +202,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.2.6]: https://pypi.org/project/genbase/0.2.6/
 [0.2.5]: https://pypi.org/project/genbase/0.2.5/
 [0.2.4]: https://pypi.org/project/genbase/0.2.4/
 [0.2.3]: https://pypi.org/project/genbase/0.2.3/

@@ -4,6 +4,8 @@ import os
 from typing import List
 
 import i18n
+from lazy_load import lazy_func
+
 
 LOCALE_MAP = {'br': 'pt_BR',
               'cs': 'cs_CZ',
@@ -45,6 +47,7 @@ i18n.set('skip_locale_root_data', True)
 i18n.resource_loader.init_json_loader()
 
 
+@lazy_func
 def translate_string(id: str) -> str:
     """Get a string based on `locale`, as defined in the './locale' folder.
 
@@ -57,6 +60,7 @@ def translate_string(id: str) -> str:
     return i18n.t(f'{id}')
 
 
+@lazy_func
 def translate_list(id: str, sep: str = ';') -> List[str]:
     """Get a list based on `locale`, as defined in the './locale' folder.
 
@@ -79,6 +83,7 @@ def set_locale(locale: str) -> None:
     return i18n.set('locale', locale)
 
 
+@lazy_func
 def get_locale() -> str:
     """Get current locale.
 
