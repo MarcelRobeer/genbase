@@ -6,7 +6,6 @@ from typing import List
 import i18n
 from lazy_load import lazy_func
 
-
 LOCALE_MAP = {'br': 'pt_BR',
               'cs': 'cs_CZ',
               'da': 'da_DK',
