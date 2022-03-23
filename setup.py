@@ -30,7 +30,7 @@ setuptools.setup( # type: ignore
     include_package_data = True,
     install_requires = [
         'instancelib>=0.4.2.0',
-        'instancelib-onnx>=0.1.3',
+        'instancelib-onnx>=0.1.3; python_version < "3.10.0"',
         'matplotlib>=3.5.0',
         'numpy>=1.19.5',
         'python-i18n>=0.3.9',
