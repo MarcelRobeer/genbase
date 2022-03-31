@@ -141,7 +141,7 @@ def import_data(dataset,
                                       data_cols=data_cols,
                                       label_cols=label_cols,
                                       label_map=label_map,
-                                      method=method,
+                                      method='infer',
                                       **read_kwargs)
 
     # Read one file with Pandas
@@ -151,9 +151,9 @@ def import_data(dataset,
             if file_type in ['.csv', '.tsv', '.txt']:
                 if 'sep' not in read_kwargs:
                     if file_type == '.csv':
-                        read_kwargs['sep']= ','
+                        read_kwargs['sep'] = ','
                     elif file_type == '.tsv':
-                        read_kwargs['sep']= '\t'
+                        read_kwargs['sep'] = '\t'
                 dataset = pd.read_csv(dataset, **read_kwargs)
             elif file_type == '.json':
                 dataset = pd.read_json(dataset, **read_kwargs)
