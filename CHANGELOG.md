@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.8] - 2022-04-06
+### Added
+- Direct import of instancelib model
+
+### Changed
+- Requires new instancelib version
+- `instancelib-onnx` is optional for Python 3.10
+
+### Fixed
+- Config export fixes
+
 ## [0.2.7] - 2022-03-21
 ### Changed
 - Lazy evaluation of internationalization functions
@@ -202,7 +213,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.2.8]: https://pypi.org/project/genbase/0.2.8/
 [0.2.7]: https://pypi.org/project/genbase/0.2.7/
+[0.2.6]: https://pypi.org/project/genbase/0.2.6/
 [0.2.5]: https://pypi.org/project/genbase/0.2.5/
 [0.2.4]: https://pypi.org/project/genbase/0.2.4/
 [0.2.3]: https://pypi.org/project/genbase/0.2.3/

@@ -105,7 +105,8 @@ def import_model(model,
         if file_type == '.pkl':
             import pickle  # nosec
             info('Unpickling model (warning: be sure you trust a source before unpickling a model!)')
-            model = pickle.load(model)  # nosec
+            with open(model, 'rb') as f:
+                model = pickle.load(f)  # nosec
         elif file_type == '.onnx':
             if not package_available('ilonnx'):
                 raise ImportError('To import ONNX files install `instancelib-onnx`!')
@@ -149,6 +150,8 @@ def import_model(model,
                 return SkLearnDataClassifier.build_from_model(model, classes=classes)
             else:
                 raise NotImplementedError('Only classifiers are currently supported!')
+    elif isinstance(model, AbstractClassifier):
+        return model
     elif 'torch' in str(type(model)):
         raise ImportError('Convert your PyTorch model with ONNX (https://pytorch.org/docs/stable/onnx.html)' +
                           ' before importing it with instancelib-onnx.')

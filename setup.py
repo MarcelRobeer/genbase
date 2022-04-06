@@ -29,7 +29,7 @@ setuptools.setup( # type: ignore
     packages = setuptools.find_packages(), # type : ignore
     include_package_data = True,
     install_requires = [
-        'instancelib>=0.4.2.0',
+        'instancelib>=0.4.4.1',
         'instancelib-onnx>=0.1.3; python_version < "3.10.0"',
         'matplotlib>=3.5.0',
         'numpy>=1.19.5',

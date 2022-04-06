@@ -27,7 +27,7 @@ def export_instancelib(obj) -> Dict[str, Any]:
                 'labels': export_instancelib(obj.labels),
                 'named_providers': export_instancelib(obj.named_providers)}
     elif isinstance(obj, Instance):
-        return {k: export_safe(v) for k, v in obj.__dict__.items()}
+        return {k: export_safe(v) for k, v in obj.__dict__.items() if k not in ['_vector']}
     elif isinstance(obj, LabelProvider):
         return {'labelset': export_safe(obj._labelset),
                 'labeldict': {k: export_safe(v) for k, v in obj._labeldict.items()}}
@@ -114,6 +114,8 @@ def recursive_to_dict(nested: Any,
     if hasattr(nested, '__qualname__') and hasattr(nested, '__annotations__'):
         yield '__name__', str(nested.__qualname__)
         nested = nested.__annotations__
+    elif hasattr(nested, 'to_config') and callable(nested.to_config):
+        nested = nested.to_config()
     elif hasattr(nested, '__dict__'):
         nested = nested.__dict__
     if not hasattr(nested, 'items'):
