@@ -63,6 +63,7 @@ def import_model(model,
 
     Examples:
         Make a scikit-learn text classifier and train it on SST2
+
         >>> from genbase import import_data, import_model
         >>> from datasets import load_dataset
         >>> ds = import_data(load_dataset('glue', 'sst2'), data_cols='sentence', label_cols='label')
@@ -75,6 +76,7 @@ def import_model(model,
 
         Load a pretrained ONNX model downloaded from 
             https://github.com/mpbron/instancelib-onnx/blob/main/example_models/data-model.onnx
+
         >>> from genbase import import_model
         >>> import_model('data-model.onnx', label_map={0: 'Bedrijfsnieuws', 1: 'Games', 2: 'Smartphones'})
 

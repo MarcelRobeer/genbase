@@ -67,22 +67,26 @@ def import_data(dataset,
 
     Examples:
         Import from an online .csv file with data in the 'text' column and labels in 'category':
+
         >>> from genbase import import_data
         >>> ds = import_data('https://storage.googleapis.com/dataset-uploader/bbc/bbc-text.csv',
                              data_cols='text', label_cols='category')
 
         Convert a pandas DataFrame to instancelib Environment:
+
         >>> from genbase import import_data
         >>> import pandas as pd
         >>> df = pd.read_csv('https://storage.googleapis.com/dataset-uploader/bbc/bbc-text.csv')
         >>> ds = import_data(df, data_cols='text', label_cols='category')
 
         Download a .zip file and convert each file in the zip to an instancelib Environment:
+
         >>> from genbase import import_data
         >>> ds = import_data('https://archive.ics.uci.edu/ml/machine-learning-databases/00462/drugsCom_raw.zip',
                              data_cols='review', label_cols='rating')
 
         Convert a huggingface dataset (sst2) to an instancelib Environment:
+
         >>> from genbase import import_data
         >>> from datasets import load_dataset
         >>> ds = import_data(load_dataset('glue', 'sst2'), data_cols='sentence', label_cols='label')
