@@ -3,7 +3,7 @@
 import copy
 import traceback
 import uuid
-from typing import Callable, List, Optional, Union
+from typing import Callable, Iterable, List, Optional, Union
 
 import srsly
 from IPython import get_ipython
@@ -332,7 +332,17 @@ def format_label(label: str, label_name: str = 'Label', h: str = 'h3') -> str:
     return f'<{h}>{label_name.title()}: <kbd>{label}</kbd></{h}>'
 
 
-def format_list(items, format_fn: Optional[Union[Callable, str]] = None):
+def format_list(items: Iterable, format_fn: Optional[Union[Callable, str]] = None) -> str:
+    """Format list of items to HTML.
+
+    Args:
+        items (Iterable): Items.
+        format_fn (Optional[Union[Callable, str]], optional): How to format each element. If none just converts it to 
+            a string. Defaults to None.
+
+    Returns:
+        str: Formatted list.
+    """
     if format_fn is None:
         format_fn = lambda x: x  # noqa: E731
     elif isinstance(format_fn, str):
@@ -419,12 +429,14 @@ def internet_connection(url: str = 'http://www.pypi.org', timeout: int = 5) -> b
 
 
 class Render:
+    """Base class for rendering configs (configuration dictionaries)."""
+
     main_color = MAIN_COLOR
     package_link = PACKAGE_LINK
     extra_css = ''
 
     def __init__(self, *configs):
-        """Base class for rendering configs (configuration dictionaries).
+        """Initialize rendering class.
 
         Example:
             Writing your own custom rendering functions `format_title()` and `render_content()`, and give the tab 
@@ -478,6 +490,7 @@ class Render:
 
     @property
     def package_name(self) -> str:
+        """Name of package."""
         if hasattr(self, '_package_name'):
             return self._package_name
         return self.package_link.rstrip('/').split('/')[-1]
@@ -486,7 +499,12 @@ class Render:
     def package_name(self, package_name: str):
         self._package_name = package_name
 
-    def css(self, **replacement_kwargs):
+    def css(self, **replacement_kwargs) -> str:
+        """Dynamically fetch CSS.
+
+        Returns:
+            str: CSS.
+        """
         css_ = CUSTOM_CSS + '\n' + self.extra_css
         for k, v in replacement_kwargs.items():
             css_ = css_.replace(f'--var({k})', v)
@@ -538,6 +556,15 @@ class Render:
         return self.format_title(title, **renderargs) if title else ''
 
     def render_subtitle(self, meta: dict, content: dict, **renderargs) -> str:
+        """Render a subtitle as HTML.
+
+        Args:
+            meta (dict): Meta information to decide on appropriate renderer.
+            content (dict): Content to render.
+
+        Returns:
+            str: SUbtitle.
+        """
         return self.format_subtitle(renderargs['subtitle']) if 'subtitle' in renderargs else ''
 
     def get_renderer(self, meta: dict):
@@ -580,6 +607,7 @@ class Render:
             self.render_content(meta, content, **renderargs)
 
     def custom_tab(self, config: dict, **renderargs) -> str:
+        """Optionally render a custom tab."""
         return ''
 
     def as_html(self, **renderargs) -> str:

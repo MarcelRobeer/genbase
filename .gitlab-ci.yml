@@ -11,12 +11,12 @@ before_script:
 flake8:
   stage: format
   script:
-    - flake8 . --config .flake8
+    - flake8 --config .flake8 genbase
 
 isort:
   stage: format
   script:
-    - python3 -m isort --check --diff genbase
+    - python3 -m isort --line-length=120 --check --diff genbase
 
 run_tests:
   stage: test

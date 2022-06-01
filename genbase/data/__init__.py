@@ -1,7 +1,6 @@
 """Data imports, sampling and generation."""
 
-from typing import (Callable, Dict, Iterator, List, Literal, Optional, Tuple,
-                    Union)
+from typing import Callable, Dict, Iterator, List, Literal, Optional, Tuple, Union
 
 import instancelib as il
 import pandas as pd

@@ -1,7 +1,6 @@
 import pytest
 
-from genbase.internationalization import (get_locale, set_locale,
-                                          translate_list, translate_string)
+from genbase.internationalization import get_locale, set_locale, translate_list, translate_string
 
 locale = ['nl', 'en']
 ids = [i for i in range(len(locale))]

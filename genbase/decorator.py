@@ -7,7 +7,13 @@ from genbase.utils import recursive_to_dict
 
 
 def add_callargs(function):
-    """Decorator that passes `__callargs__`  to a function if available. Useful in conjunction with `MetaInfo`."""
+    """Decorator that passes `__callargs__`  to a function if available.
+
+    Useful in conjunction with `genbase.MetaInfo`.
+
+    Args:
+        function: Function to wrap
+    """  # noqa: D401
     @wraps(function)
     def inner(*args, **kwargs):
         ba = inspect.signature(function).bind(*args, **kwargs)

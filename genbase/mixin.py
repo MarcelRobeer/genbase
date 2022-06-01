@@ -1,13 +1,16 @@
+"""Mixins to enhance class functionality."""
+
 from typing import Optional
 
 import numpy as np
 
 
 class SeedMixin:
-    """Adds working with ._seed and ._original_seed for reproducibility."""
+    """Adds working with `._seed` and `._original_seed` for reproducibility."""
 
     @property
     def seed(self):
+        """Seed for reproducibility."""
         return self._seed
 
     @seed.setter

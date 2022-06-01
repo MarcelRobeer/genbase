@@ -5,8 +5,7 @@ from typing import Dict, Optional, Union
 
 from instancelib.environment.base import Environment
 from instancelib.instances.base import InstanceProvider
-from instancelib.machinelearning import (AbstractClassifier,
-                                         SkLearnDataClassifier)
+from instancelib.machinelearning import AbstractClassifier, SkLearnDataClassifier
 from instancelib.typehints import LT
 from sklearn.base import is_classifier
 from sklearn.exceptions import NotFittedError

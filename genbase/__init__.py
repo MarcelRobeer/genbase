@@ -9,8 +9,7 @@ import srsly
 from genbase._version import __version__
 from genbase.data import import_data, rename_labels, train_test_split
 from genbase.decorator import add_callargs
-from genbase.internationalization import (LOCALE_MAP, get_locale, set_locale,
-                                          translate_list, translate_string)
+from genbase.internationalization import LOCALE_MAP, get_locale, set_locale, translate_list, translate_string
 from genbase.mixin import CaseMixin, SeedMixin
 from genbase.model import import_model
 from genbase.ui import Render, is_interactive

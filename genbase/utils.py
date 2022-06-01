@@ -10,8 +10,7 @@ from zipfile import ZipExtFile
 import numpy as np
 import sklearn
 import srsly
-from instancelib.analysis.base import (BinaryModelMetrics,
-                                       MulticlassModelMetrics)
+from instancelib.analysis.base import BinaryModelMetrics, MulticlassModelMetrics
 from instancelib.environment.base import Environment
 from instancelib.instances.base import Instance, InstanceProvider
 from instancelib.labels.base import LabelProvider
@@ -162,6 +161,14 @@ def package_available(package: str) -> bool:
 
 
 def extract_metrics(metrics: dict) -> Tuple[dict, list]:
+    """Extract metrics.
+
+    Args:
+        metrics (dict): Metrics.
+
+    Returns:
+        Tuple[dict, list]: Tuple containing extracted metrics and property names.
+    """
     # Get all unique property names
     properties = []
 
