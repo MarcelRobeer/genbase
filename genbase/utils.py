@@ -63,15 +63,15 @@ def export_dict(nested: dict) -> Iterator[Tuple]:
 
 def export_safe(obj):
     """Safely export to transform into JSON or YAML."""
-    if isinstance(obj, np.integer):
+    if isinstance(obj, (int, np.integer)):
         return int(obj)
-    elif isinstance(obj, (np.floating, float)):
+    elif isinstance(obj, (float, np.floating)):
         return float(obj)
     elif isinstance(obj, np.ndarray):
         return obj.tolist()
     elif 'pandas' in str(type(obj)).lower() and hasattr(obj, 'to_dict') and callable(obj.to_dict):
         return obj.to_dict()
-    elif isinstance(obj, np.str):
+    elif isinstance(obj, str):
         return str(obj)
     elif isinstance(obj, (frozenset, set)):
         return [export_safe(o) for o in list(obj)]
