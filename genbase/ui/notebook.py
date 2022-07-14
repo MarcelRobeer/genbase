@@ -15,7 +15,7 @@ PACKAGE_LINK = 'https://git.science.uu.nl/m.j.robeer/genbase/'
 MAIN_COLOR = '#000000'
 CUSTOM_CSS = """
 #--var(ui_id),
-#--var(ui_id) + footer
+#--var(ui_id) + footer,
 #--var(ui_id) + svg + footer {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
