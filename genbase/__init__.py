@@ -192,6 +192,10 @@ class MetaInfo(Configurable):
     def renderargs(self):
         return self._renderargs if self._renderargs is not None else {}
 
+    @property
+    def html(self):
+        return self._renderer(self.to_config()).as_html(**self.renderargs)
+
     def to_config(self):
         if hasattr(self, 'content'):
             _content = self.content() if callable(self.content) else self.content
@@ -202,4 +206,4 @@ class MetaInfo(Configurable):
         return {'META': self.meta, 'CONTENT': content}
 
     def _repr_html_(self) -> str:
-        return self._renderer(self.to_config()).as_html(**self.renderargs) if is_interactive() else repr(self)
+        return self.html if is_interactive() else repr(self)
