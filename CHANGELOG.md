@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.10] - 2022-07-14
+### Added
+- Ability to directly access `raw_html` through `MetaInfo.raw_html`
+
 ## [0.2.9] - 2022-07-14
 ### Added
 - Ability to directly access `html` through `MetaInfo.html`
@@ -220,6 +224,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.2.10]: https://pypi.org/project/genbase/0.2.10/
 [0.2.9]: https://pypi.org/project/genbase/0.2.9/
 [0.2.8]: https://pypi.org/project/genbase/0.2.8/
 [0.2.7]: https://pypi.org/project/genbase/0.2.7/
