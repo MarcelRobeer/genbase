@@ -15,7 +15,8 @@ PACKAGE_LINK = 'https://git.science.uu.nl/m.j.robeer/genbase/'
 MAIN_COLOR = '#000000'
 CUSTOM_CSS = """
 #--var(ui_id),
-#--var(ui_id) + footer {
+#--var(ui_id) + footer
+#--var(ui_id) + svg + footer {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -moz-osx-font-smoothing: grayscale;
@@ -38,6 +39,8 @@ CUSTOM_CSS = """
 
 #--var(ui_id) + footer a,
 #--var(ui_id) + footer a:visited,
+#--var(ui_id) + svg + footer a,
+#--var(ui_id) + svg + footer a:visited,
 #--var(ui_id) a,
 #--var(ui_id) a:visited {
     background-color: transparent;
@@ -47,6 +50,8 @@ CUSTOM_CSS = """
 
 #--var(ui_id) + footer a:hover,
 #--var(ui_id) + footer a:active,
+#--var(ui_id) + svg + footer a:hover,
+#--var(ui_id) + svg + footer a:active,
 #--var(ui_id) a:hover,
 #--var(ui_id) a:active {
     border-bottom: none;
@@ -54,17 +59,20 @@ CUSTOM_CSS = """
 }
 
 #--var(ui_id) + footer a:focus,
+#--var(ui_id) + svg + footer a:focus,
 #--var(ui_id) a:focus {
     border-bottom: none;
     outline: thin dotted;
 }
 
 #--var(ui_id) + footer a img,
+#--var(ui_id) + svg + footer a img,
 #--var(ui_id) a img {
     border: 0;
 }
 
-#--var(ui_id) + footer {
+#--var(ui_id) + footer,
+#--var(ui_id) + svg + footer {
     text-align: right;
     margin: 0 1rem;
     font-size: 1rem;

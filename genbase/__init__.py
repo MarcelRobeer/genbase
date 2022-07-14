@@ -196,6 +196,15 @@ class MetaInfo(Configurable):
     def html(self):
         return self._renderer(self.to_config()).as_html(**self.renderargs)
 
+    @property
+    def raw_html(self):
+        html = self.html
+        if 'plotly' in str.lower(html):
+            from plotly.offline import get_plotlyjs
+            html = f'<script type="text/javascript">{get_plotlyjs()}</script>' + \
+                html.replace('require(["plotly"], function(Plotly) {', '').replace('});', '')
+        return html
+
     def to_config(self):
         if hasattr(self, 'content'):
             _content = self.content() if callable(self.content) else self.content
