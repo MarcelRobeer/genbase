@@ -194,16 +194,15 @@ class MetaInfo(Configurable):
 
     @property
     def html(self):
+        if 'add_plotly' not in self.renderargs:
+            self.renderargs['add_plotly'] = not is_interactive()
         return self._renderer(self.to_config()).as_html(**self.renderargs)
 
     @property
     def raw_html(self):
-        html = self.html
-        if 'plotly' in str.lower(html):
-            from plotly.offline import get_plotlyjs
-            html = f'<script type="text/javascript">{get_plotlyjs()}</script>' + \
-                html.replace('require(["plotly"], function(Plotly) {', '').replace('});', '')
-        return html
+        renderargs = self.renderargs
+        renderargs['add_plotly'] = True
+        return self._renderer(self.to_config()).as_html(**renderargs)
 
     def to_config(self):
         if hasattr(self, 'content'):

@@ -698,11 +698,20 @@ class Render:
         main_color = renderargs.pop('main_color', self.main_color)
         package = renderargs.pop('package_link', self.package_link)
         package_name = self.package_name
+        add_plotly = renderargs.pop('add_plotly', False)
+
+        PLOTLY = ''
+        if add_plotly and 'plotly' in HTML:
+            from plotly.offline import get_plotlyjs
+            PLOTLY = f'<script type="text/javascript">{get_plotlyjs()}</script>'
 
         CSS = self.css(ui_color=main_color, ui_id=ui_id, tabs_id=tabs_id)
         FOOTER = f'<footer>Generated with <a href="{package}" target="_blank">{package_name}</a></footer>'
 
-        return f'<style>{CSS}</style>{HTML}{FOOTER}{JS}'
+        if add_plotly:
+            HTML = HTML.replace('require(["plotly"], function(Plotly) {', '').replace('});', '')
+
+        return f'{PLOTLY}<style>{CSS}</style>{HTML}{FOOTER}{JS}'
 
 
 if is_interactive() and plotly_available():
