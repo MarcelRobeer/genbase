@@ -129,6 +129,11 @@ CUSTOM_CSS = """
     display: none;
 }
 
+#--var(tabs_id) kbd {
+    color: #efefef;
+    background-color: #151515;
+}
+
 #--var(tabs_id) [type=radio]:checked + label {
     background-color: #fff;
     color: --var(ui_color);
