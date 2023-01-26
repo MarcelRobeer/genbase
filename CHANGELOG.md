@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Styling of labels in UI
 
+### Fixed
+- Support for new `pandas` versions with `pd.io.common._compression_to_extension` to `pd.io.common.extension_to_compression`
+
 ## [0.2.11] - 2022-07-15
 ### Fixed
 - Beter rendering of `raw_html` through the `use_plotly` option
