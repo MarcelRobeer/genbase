@@ -31,8 +31,8 @@ setuptools.setup( # type: ignore
     install_requires = [
         'instancelib>=0.4.4.1',
         'instancelib-onnx>=0.1.3',
-        'onnxruntime; python_version < "3.10.0"',
-        'onnxruntime>=1.12.0; python_version >= "3.10.0"',
+        'onnxruntime; python_version < "3.10"',
+        'onnxruntime>=1.12.0; python_version >= "3.10"',
         'matplotlib>=3.5.0',
         'numpy>=1.19.5',
         'python-i18n>=0.3.9',
