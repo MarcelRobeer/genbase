@@ -267,6 +267,7 @@ Extensible user interfaces (UIs) for `genbase` dependencies.
 | `plot.plotly_available()` | Check if `plotly` is installed. |
 | `notebook.format_label()` | Format label as title. |
 | `notebook.format_instances()` | Format multiple `instancelib` instances. |
+| `notebook.is_colab()` | Check if environment is Google Colab. |
 | `notebook.is_interactive()` | Check if the environment is interactive (Jupyter Notebook). |
 
 | Class | Description |

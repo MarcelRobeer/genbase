@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.16] - 2023-01-28
+### Fixed
+- Hotfix for Google Colab rendering
+
 ## [0.2.15] - 2023-01-28
 ### Fixed
 - Google Colab now recognized as interactive environment
@@ -250,6 +254,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.2.16]: https://pypi.org/project/genbase/0.2.16/
 [0.2.15]: https://pypi.org/project/genbase/0.2.15/
 [0.2.14]: https://pypi.org/project/genbase/0.2.14/
 [0.2.13]: https://pypi.org/project/genbase/0.2.13/

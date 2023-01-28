@@ -408,16 +408,23 @@ def format_instances(instances: Union[dict, List[dict]], **kwargs) -> str:
     return f'<div class="instances-wrapper table-wrapper"><table><tr>{header}</tr>{content}</table></div>'
 
 
+def is_colab() -> bool:
+    """Check if the environment is Google Colab.
+
+    Returns:
+        bool: True if Google Colab, False if not.
+    """
+    return '.colab' in str(get_ipython().__class__).lower()
+
+
 def is_interactive() -> bool:
-    """Check whether the environment is interactive (Jupyter Notebook).
+    """Check if the environment is interactive (Jupyter Notebook).
 
     Returns:
         bool: True if interactive, False if not.
     """
     try:
-        if 'interactive' in str.lower(get_ipython().__class__.__name__):
-            return True
-        elif '.colab' in str(get_ipython().__class__).lower():
+        if 'interactive' in str.lower(get_ipython().__class__.__name__) or is_colab():
             return True
         return False
     except:  # noqa: E722

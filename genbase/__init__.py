@@ -12,7 +12,7 @@ from genbase.decorator import add_callargs
 from genbase.internationalization import LOCALE_MAP, get_locale, set_locale, translate_list, translate_string
 from genbase.mixin import CaseMixin, SeedMixin
 from genbase.model import import_model
-from genbase.ui import Render, is_interactive
+from genbase.ui import Render, is_colab, is_interactive
 from genbase.utils import recursive_to_dict, silence_tqdm
 
 
@@ -214,4 +214,7 @@ class MetaInfo(Configurable):
         return {'META': self.meta, 'CONTENT': content}
 
     def _repr_html_(self) -> str:
-        return self.html if is_interactive() else repr(self)
+        if is_interactive():
+            from IPython.display import HTML
+            return HTML(self.html) if is_colab() else self.html
+        return repr(self)
