@@ -5,6 +5,7 @@ import gc
 import importlib.util
 import pkgutil
 import warnings
+from importlib import import_module
 from pathlib import Path
 from types import ModuleType
 from typing import Any, Dict, Iterator, List, Optional, Tuple
@@ -232,14 +233,17 @@ class silence_tqdm:
         """Override references to tqdm in `self.package` to just an iterator."""
         for _, name, _ in pkgutil.walk_packages(self.package.__path__, self.package.__name__ + '.'):
             try:
-                referents = gc.get_referents(eval(name))[0]
+                referents = gc.get_referents(import_module(name))[0]
                 if 'tqdm' in referents:
                     self.orig_refs[name] = referents['tqdm']
                     referents['tqdm'] = lambda i, *k, **kw: i
-            except AttributeError:
+            except (AttributeError, ModuleNotFoundError, ValueError):
                 pass
 
     def __exit__(self, *args):
         """Reset original references to tqdm in `self.package`."""
         for name, func in self.orig_refs.items():
-            gc.get_referents(eval(name))[0]['tqdm'] = func
+            try:
+                gc.get_referents(import_module(name))[0]['tqdm'] = func
+            except (ModuleNotFoundError, ValueError):
+                pass
