@@ -409,13 +409,15 @@ def format_instances(instances: Union[dict, List[dict]], **kwargs) -> str:
 
 
 def is_interactive() -> bool:
-    """Check whether the environment is interactive (Jupyter Notebook) and plotly is available for rendering.
+    """Check whether the environment is interactive (Jupyter Notebook).
 
     Returns:
         bool: True if interactive, False if not.
     """
     try:
         if 'interactive' in str.lower(get_ipython().__class__.__name__):
+            return True
+        elif '.colab' in str(get_ipython().__class__).lower():
             return True
         return False
     except:  # noqa: E722
