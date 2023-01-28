@@ -13,7 +13,7 @@ from genbase.internationalization import LOCALE_MAP, get_locale, set_locale, tra
 from genbase.mixin import CaseMixin, SeedMixin
 from genbase.model import import_model
 from genbase.ui import Render, is_interactive
-from genbase.utils import recursive_to_dict
+from genbase.utils import recursive_to_dict, silence_tqdm
 
 
 class Readable:

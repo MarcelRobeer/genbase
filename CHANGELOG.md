@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.14] - 2023-01-28
+### Added
+- Ability to silence tqdm outputs with `genbase.utils.silence_tqdm`
+
 ## [0.2.13] - 2023-01-26
 ### Fixed
 - Dependency conflicts for `onnxruntime`
@@ -242,6 +246,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.2.14]: https://pypi.org/project/genbase/0.2.14/
 [0.2.13]: https://pypi.org/project/genbase/0.2.13/
 [0.2.12]: https://pypi.org/project/genbase/0.2.12/
 [0.2.11]: https://pypi.org/project/genbase/0.2.11/

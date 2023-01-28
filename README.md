@@ -62,8 +62,9 @@ Readable data representations and meta information class.
 | `Readable` | Ensure that a class has a readable representation. |
 | `Configurable` | Adds working with configs (`.from_config()`, `from_json()`, `from_yaml()`, ..., `read_json()`, ..., `to_yaml()`) to a class. |
 | `MetaInfo` | Adds `type`, `subtype`, `callargs` and other meta descriptors to a class (subclass of `Configurable`). |
+| `silence_tqdm` | Silence output of `tqdm` in a module. |
 
-_Example_:
+_Examples_:
 ```python
 >>> from genbase import MetaInfo
 
@@ -84,6 +85,16 @@ _Example_:
 {'META': {'type': 'special_test',
           'subtype': 'special'},
  'CONTENT': {'value': 5}}
+```
+
+Silence the output of `tqdm` in a `with` statement.
+
+```python
+>>> import instancelib
+>>> from genbase import silence_tqdm
+
+>>> with silence_tqdm(instancelib):
+...    model.predict(instances)
 ```
 
 <a name="genbase-data"></a>

@@ -1,9 +1,12 @@
 """Utility functions."""
 
 import base64
+import gc
 import importlib.util
+import pkgutil
 import warnings
 from pathlib import Path
+from types import ModuleType
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 from zipfile import ZipExtFile
 
@@ -204,3 +207,39 @@ def warning(message):
     """Print a warning message."""
     warnings.formatwarning = lambda msg, *args, **kwargs: f'{msg}\n'
     warnings.warn(f'[EXCEPTION] {message}')
+
+
+class silence_tqdm:
+    """Silence all outputs of tqdm in a given module.
+
+    Example:
+        Silence tqdm in package `instancelib`:
+
+        >>> import instancelib
+        >>> with silence_tqdm(instancelib):
+        ...    model.predict(instances)
+    """
+
+    def __init__(self, package: ModuleType):
+        """
+        Args:
+            package (ModuleType): Module to silence tqdm in.
+        """
+        self.package = package
+        self.orig_refs = {}
+
+    def __enter__(self):
+        """Override references to tqdm in `self.package` to just an iterator."""
+        for _, name, _ in pkgutil.walk_packages(self.package.__path__, self.package.__name__ + '.'):
+            try:
+                referents = gc.get_referents(eval(name))[0]
+                if 'tqdm' in referents:
+                    self.orig_refs[name] = referents['tqdm']
+                    referents['tqdm'] = lambda i, *k, **kw: i
+            except AttributeError:
+                pass
+
+    def __exit__(self, *args):
+        """Reset original references to tqdm in `self.package`."""
+        for name, func in self.orig_refs.items():
+            gc.get_referents(eval(name))[0]['tqdm'] = func
