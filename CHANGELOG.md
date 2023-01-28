@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.14] - 2023-01-28
 ### Added
-- Ability to silence tqdm outputs with `genbase.utils.silence_tqdm`
+- Ability to silence tqdm outputs with `genbase.silence_tqdm`
 
 ## [0.2.13] - 2023-01-26
 ### Fixed
