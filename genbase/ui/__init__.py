@@ -5,7 +5,7 @@ from typing import Sequence, Union
 import matplotlib.cm
 import matplotlib.colors
 
-from genbase.ui.notebook import Render, format_instances, is_interactive
+from genbase.ui.notebook import Render, format_instances, is_colab, is_interactive
 from genbase.ui.plot import matplotlib_available
 
 
