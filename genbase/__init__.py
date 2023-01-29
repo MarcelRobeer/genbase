@@ -194,6 +194,8 @@ class MetaInfo(Configurable):
 
     @property
     def html(self):
+        if is_colab():
+            return self.raw_html
         if 'add_plotly' not in self.renderargs:
             self.renderargs['add_plotly'] = not is_interactive()
         return self._renderer(self.to_config()).as_html(**self.renderargs)
@@ -214,7 +216,4 @@ class MetaInfo(Configurable):
         return {'META': self.meta, 'CONTENT': content}
 
     def _repr_html_(self) -> str:
-        if is_interactive():
-            from IPython.display import HTML
-            return HTML(self.html) if is_colab() else self.html
-        return repr(self)
+        return self.html if is_interactive() else repr(self)
