@@ -43,11 +43,15 @@ See [CHANGELOG.md](CHANGELOG.md) for a full overview of the changes for each ver
 
 ---
 
-<a href="https://text-explainability.readthedocs.io/" target="_blank"><img src="https://git.science.uu.nl/m.j.robeer/text_explainability/-/raw/main/img/TextLogo-Logo large.png" alt="T_xt explainability logo" width="230px"></a><p>`text_explainability` provides a _generic architecture_ from which well-known state-of-the-art explainability approaches for text can be composed. This modular architecture allows components to be swapped out and combined, to quickly _develop new types of explainability approaches_ for (natural language) text, or to _improve a plethora of approaches_ by improving a single module. The `text_explainability` package is available through [PyPI](https://pypi.org/project/text-explainability/) and fully documented at [https://text-explainability.readthedocs.io/](https://text-explainability.readthedocs.io/).</p>
+<a href="https://explabox.readthedocs.io/" target="_blank"><img src="https://git.science.uu.nl/m.j.robeer/text_sensitivity/-/raw/main/img/TextLogo-Logo_large_sensitivity.png" alt="T_xt sensitivity logo" width="200px"></a><p>`text_explainability` can be extended to also perform _sensitivity testing_, checking for machine learning model robustness and fairness. The `text_sensitivity` package is available through [PyPI](https://pypi.org/project/text-sensitivity/) and fully documented at [https://text-sensitivity.readthedocs.io/](https://text-sensitivity.readthedocs.io/).</p>
 
 ---
 
-<a href="https://text-sensitivity.readthedocs.io/" target="_blank"><img src="https://git.science.uu.nl/m.j.robeer/text_sensitivity/-/raw/main/img/TextLogo-Logo_large_sensitivity.png" alt="T_xt sensitivity logo" width="200px"></a><p>`text_explainability` can be extended to also perform _sensitivity testing_, checking for machine learning model robustness and fairness. The `text_sensitivity` package is available through [PyPI](https://pypi.org/project/text-sensitivity/) and fully documented at [https://text-sensitivity.readthedocs.io/](https://text-sensitivity.readthedocs.io/).</p>
+<a href="https://text-explainability.readthedocs.io/" target="_blank"><img src="https://explabox.readthedocs.io/en/latest/_static/explabox-logo-text.png" alt="Explabox logo" width="230px"></a><p>The `explabox` aims to support data scientists and machine learning (ML) engineers in explaining, testing and documenting AI/ML models, developed in-house or acquired externally. The explabox turns your _ingestibles_ (AI/ML model and/or dataset) into _digestibles_ (statistics, explanations or sensitivity insights)! The `text_explainability` package is available through [PyPI](https://pypi.org/project/explabox/) and fully documented at [https://explabox.readthedocs.io/](https://explabox.readthedocs.io/).</p>
+
+---
+
+<a href="https://text-sensitivity.readthedocs.io/" target="_blank"><img src="https://git.science.uu.nl/m.j.robeer/text_sensitivity/-/raw/main/img/TextLogo-Logo_large_sensitivity.png" alt="T_xt sensitivity logo" width="200px"></a><p>`text_explainability` can be extended to also perform _sensitivity testing_, checking for machine learning model safety, robustness and fairness. The `text_sensitivity` package is available through [PyPI](https://pypi.org/project/text-sensitivity/) and fully documented at [https://text-sensitivity.readthedocs.io/](https://text-sensitivity.readthedocs.io/).</p>
 
 ---
 
