@@ -15,7 +15,7 @@ Generation base dependency**
 
 Base functions, generation functions and generic wrappers.
 
-&copy; Marcel Robeer, 2021-2022
+&copy; Marcel Robeer, 2021
 
 ## Module overview
 | Module | Description |
