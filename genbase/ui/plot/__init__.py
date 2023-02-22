@@ -45,6 +45,14 @@ class ExpressPlot:
     def interactive(self) -> str:
         return self._repr_html_()
 
+    def update_layout(self, **kwargs) -> 'ExpressPlot':
+        self.plot.update_layout(**kwargs)
+        return self
+
+    def update_traces(self, **kwargs) -> 'ExpressPlot':
+        self.plot.update_traces(**kwargs)
+        return self
+
     def to_html(self, **kwargs) -> str:
         return pio.to_html(self.plot, **kwargs)
 
