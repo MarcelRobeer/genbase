@@ -121,7 +121,8 @@ def import_data(dataset,
 
     # Unpack archived file
     extensions = pd.io.common._compression_to_extension.values() if hasattr(pd.io.common, '_compression_to_extension') \
-        else pd.io.common.extension_to_compression.keys()
+        else (pd.io.common._extension_to_compression.keys() if hasattr(pd.io.common, '_extension_to_compression') else \
+              pd.io.common.extension_to_compression.keys())
     if file_type in extensions:
         ioargs = pd.io.common._get_filepath_or_buffer(dataset, compression=file_type.replace('.', ''))
         info(f'Unpacking file "{dataset}".')

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2023-05-22
+### Fixed
+- Support for `pandas==1.5.3`
+
 ## [0.3.0] - 2023-02-22
 ### Added
 - Ability to adjust visualization of `plotly` plots with `update_layout()` and `update_traces()`
@@ -259,6 +263,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.3.1]: https://pypi.org/project/genbase/0.3.1/
 [0.3.0]: https://pypi.org/project/genbase/0.3.0/
 [0.2.20]: https://pypi.org/project/genbase/0.2.20/
 [0.2.15]: https://pypi.org/project/genbase/0.2.15/

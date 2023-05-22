@@ -35,7 +35,8 @@ def plotly_available() -> bool:
 
 class ExpressPlot:
     def __init__(self, df: pd.DataFrame, px_fn: Callable, *args, **kwargs):
-        self.plot = px_fn(df, *args, **kwargs)
+        template = kwargs.pop('template', 'none')
+        self.plot = px_fn(df, *args, template=template, **kwargs)
 
     @property
     def static(self):
