@@ -41,21 +41,12 @@ def get_compressed_files(ioargs):
             return innerhandle.buffer if hasattr(innerhandle, 'buffer') else innerhandle
 
         _handle = get_handle(handle)
-        # try:
         if _handle.mode == "r":
             zip_names = _handle.namelist()
 
             if len(zip_names) == 0:
-                raise FileNotFoundError(f'Empty ZIP file "{ioargs.filepath_or_buffer}"')                
-            return [_handle.open(name) for name in zip_names]
-        # except ValueError as e:
-        #     import tempfile
-        #     from pathlib import Path
-        #     from pandas.io.common import get_handle as pandas_handle
-
-        #     with tempfile.TemporaryDirectory() as temp_dir:
-        #         _handle.extractall(path=temp_dir)
-        #         return [pandas_handle(file, mode=mode).handle.open() for file in Path(temp_dir).iterdir()]
+                raise FileNotFoundError(f'Empty ZIP file "{ioargs.filepath_or_buffer}"')
+            return [get_handle(_handle.filename).open(name) for name in zip_names]
     raise NotImplementedError(f'Unable to process "{handle}" with compression method "{compression}"!')
 
 
