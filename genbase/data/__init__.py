@@ -35,6 +35,7 @@ def get_compressed_files(ioargs):
         return get_lzma_file()(handle, mode=mode)
     elif compression == 'zip':
         from pandas.io.common import _BytesZipFile
+        from zipfile import ZipFile
 
         def get_handle(h):
             innerhandle = _BytesZipFile(h, mode)
@@ -46,7 +47,13 @@ def get_compressed_files(ioargs):
 
             if len(zip_names) == 0:
                 raise FileNotFoundError(f'Empty ZIP file "{ioargs.filepath_or_buffer}"')
-            return [get_handle(_handle.filename).open(name) for name in zip_names]
+            for name in zip_names:
+                if not _handle.fp:
+                    _handle = ZipFile(_handle.filename, mode=mode)
+                yield _handle.open(name)
+            if _handle.fp:
+                _handle.close()
+            return
     raise NotImplementedError(f'Unable to process "{handle}" with compression method "{compression}"!')
 
 
