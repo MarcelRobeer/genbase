@@ -34,8 +34,9 @@ def get_compressed_files(ioargs):
         from pandas.compat import get_lzma_file
         return get_lzma_file()(handle, mode=mode)
     elif compression == 'zip':
-        from pandas.io.common import _BytesZipFile
         from zipfile import ZipFile
+
+        from pandas.io.common import _BytesZipFile
 
         def get_handle(h):
             innerhandle = _BytesZipFile(h, mode)

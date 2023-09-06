@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.5] - 2023-09-06
+### Fixed
+- Avoid closing `ZipFile` until all files are read in `genbase.data`
+
 ## [0.3.4] - 2023-09-06
 ### Fixed
 - Error in new Python version that closes `ZipFile` when reading multiple files
@@ -267,6 +271,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.3.5]: https://pypi.org/project/genbase/0.3.5/
 [0.3.4]: https://pypi.org/project/genbase/0.3.4/
 [0.3.1]: https://pypi.org/project/genbase/0.3.1/
 [0.3.0]: https://pypi.org/project/genbase/0.3.0/
