@@ -29,7 +29,7 @@ setuptools.setup( # type: ignore
     packages = setuptools.find_packages(), # type : ignore
     include_package_data = True,
     install_requires = [
-        'instancelib>=0.4.4.1',
+        'instancelib>=0.5.0',
         'instancelib-onnx>=0.1.3',
         'onnxruntime; python_version < "3.10"',
         'onnxruntime>=1.12.0; python_version >= "3.10"',

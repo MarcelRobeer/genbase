@@ -275,6 +275,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved data wrappers from `text_explainability` to `genbase`
 
 [Unreleased]: https://git.science.uu.nl/m.j.robeer/genbase
+[0.3.6]: https://pypi.org/project/genbase/0.3.6/
 [0.3.5]: https://pypi.org/project/genbase/0.3.5/
 [0.3.4]: https://pypi.org/project/genbase/0.3.4/
 [0.3.1]: https://pypi.org/project/genbase/0.3.1/
