@@ -62,7 +62,7 @@ def pandas_to_instancelib(dataset, data_cols, label_cols, label_map=None):
     env = il.pandas_to_env(dataset, data_cols, label_cols)
     if label_map is not None:
         if isinstance(label_map, dict):
-            label_map = {str(k): v for k, v in label_map.items()}
+            label_map = {str(k): v for k, v in sorted(label_map.items())}
         env = rename_labels(env, label_map)
     return env
 
