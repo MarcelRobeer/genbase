@@ -9,6 +9,7 @@ Generation base dependency**
 [![PyPI](https://img.shields.io/pypi/v/genbase)](https://pypi.org/project/genbase/)
 [![Python_version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://pypi.org/project/genbase/)
 [![License](https://img.shields.io/pypi/l/genbase)](https://www.gnu.org/licenses/lgpl-3.0.en.html)
+[![Lint, Security & Tests](https://github.com/MarcelRobeer/genbase/actions/workflows/check.yml/badge.svg)](https://github.com/MarcelRobeer/genbase/actions/workflows/check.yml)
 
 ---
 
