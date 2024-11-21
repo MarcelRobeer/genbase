@@ -1,5 +1,5 @@
 *<p align="center">
-  <img src="https://git.science.uu.nl/m.j.robeer/genbase/-/raw/master/img/genbase.png" alt="genbase logo" width="50%">*
+  <img src="https://github.com/MarcelRobeer/genbase/blob/0b6bb7e9cf715954ab0eeb419b6fe2d8459a23c8/img/genbase.png" alt="genbase logo" width="50%">*
 </p>
 
 **<h3 align="center">
@@ -7,8 +7,7 @@ Generation base dependency**
 </h3>
 
 [![PyPI](https://img.shields.io/pypi/v/genbase)](https://pypi.org/project/genbase/)
-[![Python_version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-blue)](https://pypi.org/project/genbase/)
-[![Build_passing](https://img.shields.io/badge/build-passing-brightgreen)](https://git.science.uu.nl/m.j.robeer/genbase/-/pipelines)
+[![Python_version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://pypi.org/project/genbase/)
 [![License](https://img.shields.io/pypi/l/genbase)](https://www.gnu.org/licenses/lgpl-3.0.en.html)
 
 ---
