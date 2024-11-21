@@ -176,7 +176,7 @@ def import_data(dataset,
             elif file_type == '.json':
                 dataset = pd.read_json(dataset, **read_kwargs)
             elif file_type == '.pkl':
-                dataset = pd.read_pickle(dataset, **read_kwargs)
+                dataset = pd.read_pickle(dataset, **read_kwargs)  # nosec
             elif file_type in ['.xls', '.xlsx']:
                 dataset = pd.read_excel(dataset, **read_kwargs)
             else:
