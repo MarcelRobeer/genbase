@@ -40,6 +40,7 @@ setuptools.setup( # type: ignore
         'requests',
         'ipython>=7.30.1',
         'lazy-load>=0.8.2',
+        'plotly',
     ],
     python_requires = '>=3.8'
 )
